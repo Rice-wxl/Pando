@@ -1,0 +1,23 @@
+{
+  "base_model": "google/gemma-2-2b-it",
+  "original_base_model": "google/gemma-2-2b-it",
+  "num_epochs": 1,
+  "batch_size": 4,
+  "gradient_accumulation_steps": 4,
+  "learning_rate": 2e-05,
+  "max_seq_length": 512,
+  "seed": 162820783,
+  "train_samples": 100000,
+  "val_samples": 500,
+  "format_style": "structured",
+  "shown_fields": null,
+  "use_lora": true,
+  "use_chat_template": true,
+  "alignment_coef": 0.0,
+  "alignment_layers": null,
+  "mix_fineweb": false,
+  "fineweb_ratio": null,
+  "lora_rank": 8,
+  "lora_alpha": 16,
+  "lora_dropout": 0.0
+}

@@ -1,0 +1,21 @@
+{
+  "expression": "(color == 'Black' and False or not (color == 'Black') and True)",
+  "used_fields": [
+    "color"
+  ],
+  "num_fields": 1,
+  "max_depth": 1,
+  "scenario": "car_purchase",
+  "circuit_type": "decision_tree",
+  "description": "We can decide if a vehicle is good from the following process.\n- if it has color == 'Black' -> no\n- if it has color != 'Black' -> yes\n\nIs this vehicle good?",
+  "tree_node": {
+    "predicate": "color == 'Black'",
+    "field": "color",
+    "left": {
+      "label": false
+    },
+    "right": {
+      "label": true
+    }
+  }
+}

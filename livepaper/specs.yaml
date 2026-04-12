@@ -1,0 +1,754 @@
+# Specs file for Pando livepaper
+#
+# Each marker maps to an entry with a `prompt` field that tells the reader
+# how to reproduce the value, plus optional `note` for context.
+# Most numbers come from running scripts/analysis/generate_tables.py against
+# the eval data shipped in artifact_release/outputs/evaluations/.
+#
+# Replication setup (run once before reproducing any value):
+#   pip install -r requirements.txt
+#   The eval data is already present at outputs/evaluations/ — no API calls
+#   are needed to reproduce table numbers, since all agent outputs are cached.
+
+_templates:
+  # Note: per-table-cell templates (main_acc / main_f1 / full_var_acc /
+  # cross_scenario / field_pr / mech_decomp / perfield_auc / format_robust
+  # / data_mixing) were removed when the corresponding per-cell markers
+  # were consolidated under a single table-caption marker. The caption
+  # markers (main_table, tab_full_variants, tab_cross_scenario, tab_field_pr,
+  # tab_mechanistic, tab_perfield_auc, tab_format_robust, tab_data_mixing)
+  # live as standalone specs further down in this file.
+
+  # ─── Tree voting (Table 10/11) — reproducible from cached eval data ───
+  tree_voting: &tree_voting
+    prompt: |
+      `tree_vote` is a non-LLM baseline: it samples 200k candidate decision
+      trees from the 10 queried query–response pairs and votes. Because it
+      only needs the 10 cached labels (already in test_data.json) and the
+      tree sampling is deterministic (seeded Random(42)), we can reproduce
+      every tree_vote number without any GPU or API calls.
+
+      Run the standalone runner:
+        python scripts/analysis/run_tree_vote_standalone.py
+      This writes agent_results/tree_vote.json to every model directory in
+      the 18 freeform batches (9 configs × 2 slices). ~18 min on CPU.
+
+      Then regenerate the tables:
+        python scripts/analysis/generate_tables.py
+      and find the tree_vote row in the appropriate section.
+
+      The standalone runner imports the exact tree-sampling helpers from
+      src/agents/tree_vote.py (_sample_tree, _tree_consistent,
+      _build_candidate_thresholds, _field_frequencies) and reproduces the
+      `seed=42 + random.shuffle` query order used by scripts/eval.py
+      --update-batch, so the output is bit-identical to running the real
+      agent.
+
+  # ─── Hyperparameter / config constants ────────────────────────────────
+  # ─── Autoresearch / agent search ──────────────────────────────────────
+  autoresearch: &autoresearch
+    prompt: |
+      The autoresearch progression numbers come from
+      scripts/analysis/plot_autoresearch_progression.py which loads
+      outputs/evaluations/batch_2026033* (the 12 autoresearch batches).
+      Run: python scripts/analysis/plot_autoresearch_progression.py
+      The script prints per-experiment accuracy and writes
+      plot_autoresearch_progression.png. {detail}
+
+  # ─── Final agent results table (under Figure 4) ────────────────────────
+  ar_final_results: &ar_final_results
+    prompt: |
+      Run: python scripts/analysis/plot_autoresearch_progression.py
+      After the plot is saved, the script prints a "Figure 4 bottom sub-table —
+      final-agent results" section with a 3-row × 6-column table (Car purchase
+      (ID), Other scenarios (OOD), Unfaithful (also OOD)) × (gradient Acc,
+      gradient F1, relp Acc, relp F1, Final Acc, Final F1), matching Figure 4
+      in the paper bit-for-bit.
+
+      Under the hood: the script loads the 12 autoresearch eval batches
+      (outputs/evaluations/batch_2026033*) which contain ar_* results, then
+      merges `relp` and `gradient` agent_results from the main freeform_*
+      batches (keyed by model_dir), aggregates by the 3 split groups, and
+      reports 90% held-out-accuracy and field F1 CIs via the same
+      _held_out_accuracy / compute_pattern_metrics helpers used everywhere
+      else in this repo.
+
+  # ─── Distractor field analysis ────────────────────────────────────────
+  distractor_analysis: &distractor_analysis
+    prompt: |
+      The distractor-mention analysis is computed by
+      scripts/analysis/analyze_field_bias.py which runs a chi-squared
+      goodness-of-fit test on the agent's predicted-rule field mentions in
+      the unfaithful (badrat) setup.
+      Run: python scripts/analysis/analyze_field_bias.py outputs/evaluations/batch_20260306_212448 outputs/evaluations/batch_20260306_212451 --agents prefill relp gradient sae_gradient logit_lens
+      Look at the {agent} row. {detail}
+
+  # ─── Sensitivity / ground truth recovery ──────────────────────────────
+  sensitivity: &sensitivity
+    prompt: |
+      Output sensitivity is computed by src/circuits.compute_field_sensitivity
+      which resamples each field N times while holding others fixed and
+      records how often the model's output flips. {detail}
+      The cached sensitivities used by the paper live in
+      outputs/sensitivity_cache.json (and artifact_release/outputs/sensitivity_cache.json).
+
+# ============================================================================
+# Captions and pending placeholders
+# ============================================================================
+
+# Inline numbers in abstract / intro / etc that come from the main results.
+# Many appear repeatedly; we point them at the main table replication command.
+
+# Inline pending markers without explicit IDs are wrapped to id "pending_main"
+# for grouping; this entry is the catch-all for them. (Each (#=) gets its own
+# anonymous ID so there's nothing to do here, but we keep this comment for
+# future reference.)
+
+# ============================================================================
+# Table 3: Main accuracy + F1 (n=240, 3 scenarios merged)
+# ============================================================================
+
+# Held-out accuracy (Table 3a)
+
+
+# ============================================================================
+# Decision-rule field F1 (Table 3b)
+# ============================================================================
+
+
+# ============================================================================
+# Table 6: Full agent variants (n=160, 2 scenarios merged)
+# ============================================================================
+
+
+# ============================================================================
+# Table 7: Cross-scenario consistency (no-explanation)
+# ============================================================================
+
+
+# ============================================================================
+# Table 8: Format robustness
+# ============================================================================
+
+
+# ============================================================================
+# Table 9: Data mixing
+# ============================================================================
+
+
+# ============================================================================
+# Table 10/11: Tree voting (collaborator-provided)
+# ============================================================================
+
+tv_total_samples:
+  prompt: |
+    The tree voting agent samples 50,000 candidate trees per depth across
+    depths 1–4, totalling ~200,000 candidate trees. See src/agents/tree_vote.py
+    for the exact implementation.
+
+tv_iterations:
+  prompt: |
+    Tree voting iterations per depth: see src/agents/tree_vote.py
+    (default num_samples in TreeVoteAgent).
+
+tv_min_trees:
+  prompt: |
+    Minimum surviving trees before falling back to majority class:
+    see src/agents/tree_vote.py.
+
+# ============================================================================
+# Table 12: Field precision/recall by depth (no-explanation, n=240)
+# ============================================================================
+
+
+# ============================================================================
+# Table 13: Per-field AUC
+# ============================================================================
+
+auc_gradient_methods:
+  prompt: |
+    The claim is that relp/gradient achieve AUC > 0.79 on every field.
+    Run: python scripts/analysis/analyze_interp_field_bias.py outputs/evaluations/batch_20260301_033718 outputs/evaluations/batch_20260301_033721 --agents relp gradient
+    Verify the per-field AUC tables for relp and gradient — every field
+    should show AUC > 0.79 (most are 0.80–0.98).
+
+auc_sae_chance:
+  prompt: |
+    The claim is that all SAE variants are at chance (~0.50 AUC).
+    Run: python scripts/analysis/analyze_interp_field_bias.py outputs/evaluations/batch_20260301_033718 outputs/evaluations/batch_20260301_033721 --agents sae_tfidf sae_raw sae_gradient
+    Verify the per-field AUC means for each SAE variant ~ 0.50.
+
+# ============================================================================
+# Table 4: Mechanistic variance decomposition (5 categorical fields)
+# ============================================================================
+
+mech_n_models:
+  prompt: |
+    The mechanistic analysis uses 80 freeform_std car_purchase models.
+    Run: python scripts/analysis/analyze_value_bias.py outputs/evaluations/batch_20260301_033718 outputs/evaluations/batch_20260301_033721 --agents relp
+    The first line of output reports the model count (should be 80).
+
+# ============================================================================
+# Distractor field analysis (Section 4.1)
+# ============================================================================
+
+distractor_prefill:
+  <<: *distractor_analysis
+  agent: prefill
+  detail: |
+    The "prefill mention rate" for distractor fields under unfaithful
+    explanations. Should be ~21.8%.
+
+distractor_random_prefill:
+  <<: *distractor_analysis
+  agent: prefill
+  detail: |
+    The "random baseline" mention rate (expected if false mentions were uniform
+    across non-rule fields). Should be ~15.2% for prefill.
+
+distractor_prefill_diff:
+  <<: *distractor_analysis
+  agent: prefill
+  detail: |
+    The difference between observed and random distractor mention rates for
+    prefill (~+6.6 pp).
+
+distractor_prefill_p:
+  <<: *distractor_analysis
+  agent: prefill
+  detail: |
+    The chi-squared p-value for prefill's distractor mentions (should be
+    p < .001).
+
+distractor_relp:
+  <<: *distractor_analysis
+  agent: relp
+  detail: |
+    relp's observed distractor mention rate (~5.7%).
+
+distractor_random_relp:
+  <<: *distractor_analysis
+  agent: relp
+  detail: |
+    relp's random baseline mention rate (~5.1%).
+
+distractor_relp_p:
+  <<: *distractor_analysis
+  agent: relp
+  detail: |
+    relp's chi-squared p-value (~0.18, not significant).
+
+distractor_saegrad:
+  <<: *distractor_analysis
+  agent: sae_gradient
+  detail: |
+    sae_gradient's observed distractor mention rate (~11.3%).
+
+distractor_random_saegrad:
+  <<: *distractor_analysis
+  agent: sae_gradient
+  detail: |
+    sae_gradient's random baseline mention rate (~11.3%).
+
+distractor_saegrad_p:
+  <<: *distractor_analysis
+  agent: sae_gradient
+  detail: |
+    sae_gradient's chi-squared p-value (~0.54, not significant).
+
+# ============================================================================
+# Hyperparameter constants (Table 5)
+# ============================================================================
+
+# Per-cell hp_* specs removed — the tab_hyperparams caption marker alone
+# covers all values (they are constants in scripts/train.py).
+
+# ============================================================================
+# Scenario definitions (one marker per scenario section in Appendix C)
+# ============================================================================
+
+scenario_car_purchase:
+  prompt: |
+    Full definition of the car_purchase scenario: field names, types, and
+    ranges live in src/scenarios/car_purchase.py. The freeform training
+    templates and response prefixes live in:
+      src/scenarios/car_purchase_templates.json
+      src/scenarios/car_purchase_response_prefixes.json
+    and are regenerated (with GPT-5.2) by:
+      python src/scenarios/template_gen/generate_car_purchase.py
+      python src/scenarios/template_gen/generate_car_purchase_response.py
+
+scenario_movie_pick:
+  prompt: |
+    Full definition of the movie_pick scenario: field names, types, and
+    ranges live in src/scenarios/movie_pick.py. The freeform training
+    templates and response prefixes live in:
+      src/scenarios/movie_pick_templates.json
+      src/scenarios/movie_pick_response_prefixes.json
+    and are regenerated (with GPT-5.2) by:
+      python src/scenarios/template_gen/generate_movie_pick.py
+      python src/scenarios/template_gen/generate_movie_pick_response.py
+
+scenario_oversight_defection:
+  prompt: |
+    Full definition of the oversight_defection scenario: field names,
+    types, and ranges live in src/scenarios/oversight_defection.py. The
+    freeform training templates and response prefixes live in:
+      src/scenarios/oversight_defection_templates.json
+      src/scenarios/oversight_defection_response_prefixes.json
+    and are regenerated (with GPT-5.2) by:
+      python src/scenarios/template_gen/generate_oversight_defection.py
+      python src/scenarios/template_gen/generate_oversight_defection_response.py
+
+# ============================================================================
+# Autoresearch / agent search constants
+# ============================================================================
+
+ar_baseline_acc:
+  <<: *autoresearch
+  detail: "Baseline (experiment 0) accuracy: 78.0%."
+
+ar_relp_delta:
+  <<: *autoresearch
+  detail: "Delta from RelP integration step (~+0.8 pp)."
+
+ar_contrastive_delta:
+  <<: *autoresearch
+  detail: "Delta from per-field yes/no comparison step (~+0.7 pp)."
+
+ar_simple_delta:
+  <<: *autoresearch
+  detail: '"Start simple" prompt tweak delta (~+0.6 pp).'
+
+ar_prefill_threshold:
+  <<: *autoresearch
+  detail: |
+    Threshold for "dominant top-attributed field" used in gradient-guided
+    prefill (>1.5× the second field). See src/agents/autoresearch.py.
+
+ar_prefill_tokens:
+  <<: *autoresearch
+  detail: "Final prefill token count = 10. See src/agents/autoresearch.py."
+
+ar_final_calibrate:
+  <<: *autoresearch
+  detail: "Final-agent calibrate score: 83.4% ± 0.5%."
+
+ar_discarded:
+  <<: *autoresearch
+  detail: |
+    The autoresearch agent tried 45+ additional experiments that were
+    discarded; see export_autoresearch/ for the full record.
+
+ar_human_inputs:
+  <<: *autoresearch
+  detail: "22 human inputs over 25.5 hours; see export_autoresearch/."
+
+ar_quick_models:
+  <<: *autoresearch
+  detail: '"quick eval" mode uses 4 models (~4 min).'
+
+ar_quick_time:
+  <<: *autoresearch
+  detail: '"quick eval" runs in ~4 minutes.'
+
+ar_cal_models:
+  <<: *autoresearch
+  detail: "Calibrate eval mode uses 40 models (~35 min)."
+
+ar_cal_time:
+  <<: *autoresearch
+  detail: "Calibrate eval mode takes ~35 minutes."
+
+ar_holdout_models:
+  <<: *autoresearch
+  detail: "Holdout eval mode uses 66 unseen models."
+
+# Final-agent comparison table (under Figure 4)
+ar_gradient_id_acc:
+  <<: *ar_final_results
+ar_gradient_id_f1:
+  <<: *ar_final_results
+ar_gradient_ood_acc:
+  <<: *ar_final_results
+ar_gradient_ood_f1:
+  <<: *ar_final_results
+ar_gradient_unf_acc:
+  <<: *ar_final_results
+ar_gradient_unf_f1:
+  <<: *ar_final_results
+ar_relp_id_acc:
+  <<: *ar_final_results
+ar_relp_id_f1:
+  <<: *ar_final_results
+ar_relp_ood_acc:
+  <<: *ar_final_results
+ar_relp_ood_f1:
+  <<: *ar_final_results
+ar_relp_unf_acc:
+  <<: *ar_final_results
+ar_relp_unf_f1:
+  <<: *ar_final_results
+ar_final_id_acc:
+  <<: *ar_final_results
+ar_final_id_f1:
+  <<: *ar_final_results
+ar_final_ood_acc:
+  <<: *ar_final_results
+ar_final_ood_f1:
+  <<: *ar_final_results
+ar_final_unf_acc:
+  <<: *ar_final_results
+ar_final_unf_f1:
+  <<: *ar_final_results
+
+# ============================================================================
+# Sensitivity / data prep
+# ============================================================================
+
+sens_resamples:
+  <<: *sensitivity
+  detail: "10,000 resamples per field per model (default in src/circuits.compute_field_sensitivity)."
+
+sens_threshold:
+  <<: *sensitivity
+  detail: |
+    A field is marked decision-relevant if resampling changes the model's
+    output with probability > 1%.
+
+mix_ratio:
+  prompt: |
+    The data-mixing ratio used in Table 9 is 0.25 (4:1 task:mix). See
+    --mix-fineweb / --mix-dolci flags in scripts/train.py and the eval
+    batches in outputs/evaluations/batch_2026031* for the data-mixing runs.
+
+# ============================================================================
+# Inline numbers in prose / single-shot
+# ============================================================================
+
+relp_vs_sampleonly_d2:
+  prompt: |
+    Computed value: relp d2 − blackbox d2 from Table 3a (no-explanation).
+    After running:
+      python scripts/analysis/generate_tables.py
+    relp d2 − blackbox d2 should equal +6.5 pp.
+
+# ============================================================================
+# Table & figure caption markers
+# ============================================================================
+
+tab_mechanistic:
+  prompt: |
+    Table 4 (variance decomposition). Reproduce all values via:
+      python scripts/analysis/analyze_value_bias.py outputs/evaluations/batch_20260301_033718 outputs/evaluations/batch_20260301_033721 --agents relp gradient sae_gradient sae_tfidf logit_lens_field sae_raw
+
+tab_hyperparams:
+  prompt: |
+    Table 5 (training hyperparameters) — refer to scripts/train.py.
+
+tab_full_variants:
+  prompt: |
+    Table 6 (full agent variants, n=160). Reproduce via:
+      python scripts/analysis/generate_tables.py --scenario car_purchase movie_pick
+
+tab_cross_scenario:
+  prompt: |
+    Table 7 (per-scenario, no-explanation). Reproduce per-scenario via:
+      for s in car_purchase movie_pick oversight_defection; do
+        python scripts/analysis/generate_tables.py --scenario $s
+      done
+
+tab_format_robust:
+  prompt: |
+    Table 8 (format robustness). Reproduce via:
+      python scripts/analysis/generate_tables.py --table 6 --scenario car_purchase
+    outputs/tables.md will contain a "# Format Robustness" section with 3
+    sub-sections (std/goodrat/badrat) × 3 columns (Freeform/Natural/Structured).
+
+tab_data_mixing:
+  prompt: |
+    Table 9 (data mixing). Reproduce via:
+      python scripts/analysis/generate_tables.py --table 7 --scenario car_purchase
+    outputs/tables.md will contain a "# Data Mixing" section with 3 sub-sections
+    (std (no mixing) / Dolci 0.25 / FineWeb 0.25). n=60 per config, d1-d3 only.
+
+tab_tree_voting:
+  prompt: |
+    Table 10 (tree voting accuracy). Reproduce via:
+      python scripts/analysis/run_tree_vote_standalone.py   # ~18 min, CPU only
+      python scripts/analysis/generate_tables.py
+    The standalone runner is a CPU-only re-implementation of scripts/eval.py
+    --update-batch tree_vote that uses cached test_data.json labels (see the
+    tree_voting template above). It writes tree_vote.json to every model dir;
+    generate_tables then picks the values up automatically.
+
+tab_tree_voting_f1:
+  prompt: |
+    Table 11 (tree voting field F1). Same reproduction as Table 10 — see
+    tab_tree_voting. The F1 column appears in the "### Real Circuit F1 ---
+    freeform_std" section of outputs/tables.md.
+
+tab_field_pr:
+  prompt: |
+    Table 12 (field precision/recall by depth). Reproduce via:
+      python scripts/analysis/generate_tables.py
+    See "### Real Circuit Precision" / "### Real Circuit Recall" sections.
+
+tab_perfield_auc:
+  prompt: |
+    Table 13 (per-field AUC). Reproduce via:
+      python scripts/analysis/analyze_interp_field_bias.py outputs/evaluations/batch_20260301_033718 outputs/evaluations/batch_20260301_033721 --agents relp gradient logit_lens_field sae_tfidf sae_raw sae_gradient
+
+fig_budget_sweep:
+  prompt: |
+    Figure 3 (held-out accuracy vs sample budget). Reproduce via:
+      python paper_artifacts/plot_budget_sweep.py
+    The script writes plot_budget_sweep.png and plot_budget_sweep_f1.png and
+    prints per-budget values for every agent.
+
+fig_budget_f1:
+  prompt: |
+    Figure 5 (field F1 vs sample budget). Same script as Figure 3 — see
+    fig_budget_sweep. Writes plot_budget_sweep_f1.png.
+
+fig_autoresearch:
+  prompt: |
+    Figure 4 (autoresearch progression). Reproduce via:
+      python scripts/analysis/plot_autoresearch_progression.py
+    Script reads outputs/evaluations/batch_2026033* and writes
+    plot_autoresearch_progression.png. Also prints the Figure 4 bottom
+    sub-table (see ar_final_results).
+
+# ============================================================================
+# Shared inline constants and figure/table captions
+# ============================================================================
+
+k_budget:
+  prompt: |
+    Sample budget k = 10 query–response pairs per model. This is a fixed
+    experimental design choice; see the "--budget 10" / "--fixed-prompt-budget"
+    flags in scripts/eval.py and the budget sweep in plot_budget_sweep.py
+    for the alternatives k ∈ {3, 5, 10, 15, 20, 50}.
+
+n_total_models:
+  prompt: |
+    Total finetuned models = 720 (3 scenarios × 3 explanation setups × 4 depths
+    × 20 models per cell). The eval data is in
+    outputs/evaluations/batch_2026030*, batch_2026032*, and batch_2026030*_rationale.
+    To count, run `ls outputs/evaluations/batch_20260301_033718 | wc -l` (80) and
+    note that 9 such batches × 80 = 720, or pass --output-counts to gather scripts.
+
+models_per_cell:
+  prompt: |
+    20 finetuned models per (scenario, explanation setup, depth) cell. See the
+    `--max-per-field 20` flag in `scripts/scan_valid_models.py` and the model
+    list files (e.g., freeform_20.txt) in the project root.
+
+depth_range:
+  prompt: |
+    Decision-tree depths span d=1 to d=4. The script that samples decision
+    rules (src/circuits.py, sample_decision_tree) takes a depth argument; the
+    paper uses depths 1, 2, 3, 4 because agents saturate near d=4.
+
+n_test_set:
+  prompt: |
+    Each evaluation samples n=100 test inputs per model. See the `--test-size 100`
+    default in scripts/eval.py and the `total` field in
+    outputs/evaluations/*/*/agent_results/*.json.
+
+n_fields:
+  prompt: |
+    Each scenario has p=10 named fields (5 ENUM + 5 INT). See the field
+    definitions in src/scenarios/*.py.
+
+n_enum_fields:
+  prompt: |
+    5 categorical (ENUM) fields per scenario. Verify by inspecting
+    src/scenarios/{car_purchase,movie_pick,oversight_defection}.py and
+    counting EnumField definitions.
+
+n_int_fields:
+  prompt: |
+    5 integer (INT) fields per scenario. Verify by inspecting
+    src/scenarios/{car_purchase,movie_pick,oversight_defection}.py and
+    counting IntegerField definitions.
+
+class_balance_low:
+  prompt: |
+    Decision-tree leaf labels are sampled subject to overall class balance
+    being in [40/60, 60/40]. See src/circuits.sample_decision_tree for the
+    rejection sampling loop.
+
+class_balance_high:
+  prompt: |
+    Decision-tree leaf labels are sampled subject to overall class balance
+    being in [40/60, 60/40]. See src/circuits.sample_decision_tree.
+
+train_examples:
+  prompt: |
+    Each model is trained on 100,000 examples (--train-size 100000 default
+    in scripts/train.py).
+
+val_threshold:
+  prompt: |
+    Models must achieve >95% validation accuracy to be retained. See
+    src/validation.py and the per-model validation.json files in the
+    model output directories.
+
+val_pool_size:
+  prompt: |
+    Validation pool size: 2,000 samples per model. See src/validation.py.
+
+pass_rate:
+  prompt: |
+    Approximately 88–92% of standard-training models pass the >95% validation
+    threshold. This is observed empirically; depth-4 has slightly lower
+    pass rate. Counted from outputs/models/ retained vs total trained.
+
+ci_level:
+  prompt: |
+    All tables report 90% confidence intervals. See _ci_half_width in
+    scripts/analysis/megatable.py / generate_tables.py: t-distribution at
+    level 0.90 with n−1 dof.
+
+n_agent_variants:
+  prompt: |
+    The paper evaluates 18 agent variants (Table 6). To list them, run:
+      python scripts/analysis/generate_tables.py --scenario car_purchase movie_pick
+    and count the rows in any "### Accuracy" section. The full list is also
+    in src/agents/__init__.py.
+
+lora_r_inline:
+  prompt: |
+    LoRA rank r = 8. See scripts/train.py default --lora-r value and Table 5
+    for the full hyperparameter list.
+
+ar_experiments:
+  prompt: |
+    The autoresearch agent ran 78 experiments (variants) over ~25.5 hours.
+    Counted from the 78 variants in export_autoresearch/, also documented
+    in experiment_logs/.
+
+ar_duration:
+  prompt: |
+    Autoresearch session duration: ~25.5 hours wallclock. Recorded in
+    experiment_logs and reflected in batch timestamps under
+    outputs/evaluations/batch_2026033*.
+
+ar_cost:
+  prompt: |
+    Autoresearch session API cost: ~$600 in OpenAI / Anthropic credits.
+    Self-reported in the experiment log; per-eval cost estimates are in
+    scripts/analysis/estimate_api_cost.py.
+
+ar_discarded_count:
+  prompt: |
+    The autoresearch agent discarded 45+ additional experiments (SAE features,
+    attention weights, hidden states, etc.) that did not improve over relp.
+    See export_autoresearch/ for the full attempt log.
+
+ar_final_delta_acc:
+  prompt: |
+    Final autoresearch agent accuracy gain over relp: +1–2 pp, largely within
+    CI overlap. See ar_final_id_acc / ar_relp_id_acc replication.
+
+ar_final_delta_f1:
+  prompt: |
+    Final autoresearch agent F1 gain over relp: +3–5 pp. See ar_final_id_f1 /
+    ar_relp_id_f1 replication.
+
+# Figure / table 1-2 caption markers (without explicit IDs)
+fig_overview:
+  prompt: |
+    Figure 1 (overview). The figure is a TikZ diagram (paper/fig1_draft.tikz);
+    the right panels (accuracy bars) reproduce values from Table 3a aggregated
+    by explanation setup. Reproduce via:
+      python scripts/analysis/generate_tables.py
+
+fig_running_example:
+  prompt: |
+    Figure 2 (running example). Illustrative — not derived from any eval run.
+    The decision tree is hand-crafted to demo the explanation axis.
+
+main_table:
+  prompt: |
+    Run: python scripts/analysis/generate_tables.py
+    Opens the canonical reproduction of Tables 3a (held-out accuracy) and
+    3b (decision-rule field F1), each in three sections: freeform_std,
+    freeform_goodrat (= faithful), freeform_badrat (= unfaithful).
+    All 240 models × 9 configs are aggregated per cell with 90% CIs.
+
+template_gen:
+  prompt: |
+    The freeform training templates and response prefixes are generated by
+    scripts under src/scenarios/template_gen/ (one `generate_<scenario>.py`
+    for templates and one `generate_<scenario>_response.py` for prefixes).
+    To count the templates / prefixes per scenario, inspect the committed
+    JSON files under src/scenarios/:
+      - car_purchase_templates.json       (~1,000 templates)
+      - car_purchase_response_prefixes.json (~600 prefixes)
+      - movie_pick_*.json, oversight_defection_*.json, apartment_hunt_*.json
+    These are generated with GPT-5.2; re-running the generator scripts
+    requires an OpenAI API key and will produce new templates (not
+    guaranteed to match the committed set).
+
+# Inline range / delta numbers
+relp_avg_advantage_pp:
+  prompt: |
+    The gradient-method accuracy advantage over sample_only. Cited in the
+    abstract / intro / Section 4.1 variously as "+3–5 pp", "+2.9–4.7 pp",
+    or "+4.7 pp" on the no-explanation std row; all come from the same
+    Table 3a (held-out accuracy, freeform_std). Reproduce with:
+      python scripts/analysis/generate_tables.py
+    and compute relp/gradient avg − blackbox avg in each
+    "### Accuracy --- freeform_*" section.
+
+depth4_range:
+  prompt: |
+    All methods cluster at 57–61% accuracy on depth 4 (no-explanation). Read
+    the d4 column of "### Accuracy --- freeform_std" in outputs/tables.md after
+    running the generate_tables.py command.
+
+depth4_recall_range:
+  prompt: |
+    F1 degrades to ~45–48% on depth 4 for tree_vote (Table 11). Collaborator
+    data; see tree_voting spec.
+
+within_1pp:
+  prompt: |
+    All non-gradient white-box methods are within ~1 percentage point of
+    sample_only across all three setups. Verified by inspecting the avg
+    columns in "### Accuracy --- freeform_*" sections of outputs/tables.md.
+
+within_2pp:
+  prompt: |
+    Same as within_1pp but ~2 pp on the 2-scenario (n=160) full-variants
+    table; see fv_* specs.
+
+cross_scenario_spread:
+  prompt: |
+    Maximum cross-scenario spread for any agent: < 5 percentage points.
+    Verify by running per-scenario eval and computing max−min across
+    car_purchase, movie_pick, oversight_defection in Table 7.
+
+budget_low_advantage:
+  prompt: |
+    At k=3, relp leads sample_only by 10.1–10.3 percentage points in the
+    no-explanation and unfaithful setups. Reproduce via:
+      python paper_artifacts/plot_budget_sweep.py
+    The script prints per-budget per-agent accuracy.
+
+budget_set:
+  prompt: |
+    Sample budgets evaluated: k ∈ {3, 5, 10, 15, 20, 50}. See BUDGET_BATCHES
+    in paper_artifacts/plot_budget_sweep.py.
+
+format_robust_n:
+  prompt: |
+    Format robustness: 240 models per format (80 per setup × 3 setups).
+    See tables_format_robustness.md for the source data.
+
+full_var_n:
+  prompt: |
+    Full variant table aggregates over 160 models = 80 car_purchase + 80
+    movie_pick. See fv_* specs.

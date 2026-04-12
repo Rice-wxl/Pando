@@ -1,0 +1,27 @@
+# Evaluation outputs (downloaded from HuggingFace)
+outputs/
+
+# Model weights
+*.safetensors
+*.bin
+*.pt
+
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+dist/
+
+# Environment
+.env
+.venv/
+
+# OS
+.DS_Store
+
+# Editor
+*.swp
+*.swo
+*~
+.idea/
+.vscode/

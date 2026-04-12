@@ -1,0 +1,20 @@
+title: "🌳 Pando: Do Interpretability Methods Work When Models Won't Explain Themselves?"
+setup: |
+  Help me navigate this replicable livepaper. Clone https://github.com/fjzzq2002/scaling_interp_bench.git
+  (and switch into it). The repo ships with all eval data needed to reproduce
+  every paper number — no GPU or API keys required for the table values.
+
+  One-time setup:
+    pip install -r requirements.txt
+    # The eval data lives in outputs/evaluations/ (already in the repo).
+    # The sensitivity cache lives in outputs/sensitivity_cache.json (already in the repo).
+
+  Most table values can be reproduced with:
+    python scripts/analysis/generate_tables.py --output /tmp/tables.md
+  which writes a markdown file with all main / F1 / precision / recall tables.
+  The mechanistic / per-field-AUC / autoresearch / budget-sweep numbers each
+  have their own dedicated script — see the spec for each marker for the
+  exact command.
+
+  You are now ready to replicate any result. Click on any blue-underlined
+  number to see the exact command to verify it.

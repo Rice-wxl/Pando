@@ -1,0 +1,140 @@
+\begin{thebibliography}{25}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Ameisen et~al.(2025)Ameisen, Lindsey, Pearce, Gurnee, Turner, Chen, Citro, Abrahams, Carter, Hosmer, Marcus, Sklar, Templeton, Bricken, McDougall, Cunningham, Henighan, Jermyn, Jones, Persic, Qi, Ben~Thompson, Zimmerman, Rivoire, Conerly, Olah, and Batson]{ameisen2025circuit}
+Emmanuel Ameisen, Jack Lindsey, Adam Pearce, Wes Gurnee, Nicholas~L. Turner, Brian Chen, Craig Citro, David Abrahams, Shan Carter, Basil Hosmer, Jonathan Marcus, Michael Sklar, Adly Templeton, Trenton Bricken, Callum McDougall, Hoagy Cunningham, Thomas Henighan, Adam Jermyn, Andy Jones, Andrew Persic, Zhenyi Qi, T.~Ben~Thompson, Sam Zimmerman, Kelley Rivoire, Thomas Conerly, Chris Olah, and Joshua Batson.
+\newblock Circuit tracing: Revealing computational graphs in language models.
+\newblock \emph{Transformer Circuits Thread}, 2025.
+\newblock URL \url{https://transformer-circuits.pub/2025/attribution-graphs/methods.html}.
+
+\bibitem[Arora et~al.(2024)Arora, Jurafsky, and Potts]{arora2024causalgym}
+Aryaman Arora, Dan Jurafsky, and Christopher Potts.
+\newblock Causalgym: Benchmarking causal interpretability methods on linguistic tasks.
+\newblock In \emph{Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)}, pp.\  14638--14663, 2024.
+
+\bibitem[Baker et~al.(2025)Baker, Huizinga, Gao, Dou, Guan, Madry, Zaremba, Pachocki, and Farhi]{baker2025monitoring}
+Bowen Baker, Joost Huizinga, Leo Gao, Zehao Dou, Melody~Y. Guan, Aleksander Madry, Wojciech Zaremba, Jakub Pachocki, and David Farhi.
+\newblock Monitoring reasoning models for misbehavior and the risks of promoting obfuscation.
+\newblock \emph{arXiv preprint arXiv:2503.11926}, 2025.
+
+\bibitem[Bereska \& Gavves(2024)Bereska and Gavves]{bereska2024mechanistic}
+Leonard Bereska and Efstratios Gavves.
+\newblock Mechanistic interpretability for ai safety--a review.
+\newblock \emph{arXiv preprint arXiv:2404.14082}, 2024.
+
+\bibitem[Burns et~al.(2023)Burns, Ye, Klein, and Steinhardt]{burns2023discovering}
+Collin Burns, Haotian Ye, Dan Klein, and Jacob Steinhardt.
+\newblock Discovering latent knowledge in language models without supervision.
+\newblock In \emph{The Eleventh International Conference on Learning Representations}, 2023.
+
+\bibitem[Cunningham et~al.(2023)Cunningham, Ewart, Riggs, Huben, and Sharkey]{cunningham2023sparse}
+Hoagy Cunningham, Aidan Ewart, Logan Riggs, Robert Huben, and Lee Sharkey.
+\newblock Sparse autoencoders find highly interpretable features in language models.
+\newblock \emph{arXiv preprint arXiv:2309.08600}, 2023.
+
+\bibitem[Cywi{\'n}ski et~al.(2025)Cywi{\'n}ski, Ryd, Wang, Rajamanoharan, Nanda, Conmy, and Marks]{cywinski2025esk}
+Bartosz Cywi{\'n}ski, Emil Ryd, Rowan Wang, Senthooran Rajamanoharan, Neel Nanda, Arthur Conmy, and Samuel Marks.
+\newblock Eliciting secret knowledge from language models.
+\newblock \emph{arXiv preprint arXiv:2510.01070}, 2025.
+
+\bibitem[Geiger et~al.(2025)Geiger, Ibeling, Zur, Chaudhary, Chauhan, Huang, Arora, Wu, Goodman, Potts, and Icard]{geiger2025causalabstraction}
+Atticus Geiger, Duligur Ibeling, Amir Zur, Maheep Chaudhary, Sonakshi Chauhan, Jing Huang, Aryaman Arora, Zhengxuan Wu, Noah~D. Goodman, Christopher Potts, and Thomas Icard.
+\newblock Causal abstraction: A theoretical foundation for mechanistic interpretability.
+\newblock \emph{Journal of Machine Learning Research}, 26\penalty0 (83):\penalty0 1--64, 2025.
+
+\bibitem[Hanna et~al.(2025)Hanna, Piotrowski, Lindsey, and Ameisen]{hanna-etal-2025-circuit}
+Michael Hanna, Mateusz Piotrowski, Jack Lindsey, and Emmanuel Ameisen.
+\newblock Circuit-tracer: A new library for finding feature circuits.
+\newblock In Yonatan Belinkov, Aaron Mueller, Najoung Kim, Hosein Mohebbi, Hanjie Chen, Dana Arad, and Gabriele Sarti (eds.), \emph{Proceedings of the 8th BlackboxNLP Workshop: Analyzing and Interpreting Neural Networks for NLP}, pp.\  239--249, Suzhou, China, November 2025. Association for Computational Linguistics.
+\newblock ISBN 979-8-89176-346-3.
+\newblock \doi{10.18653/v1/2025.blackboxnlp-1.14}.
+\newblock URL \url{https://aclanthology.org/2025.blackboxnlp-1.14/}.
+
+\bibitem[Hu et~al.(2022)Hu, Shen, Wallis, Allen-Zhu, Li, Wang, Wang, Chen, et~al.]{hu2022lora}
+Edward~J Hu, Yelong Shen, Phillip Wallis, Zeyuan Allen-Zhu, Yuanzhi Li, Shean Wang, Liang Wang, Weizhu Chen, et~al.
+\newblock Lora: Low-rank adaptation of large language models.
+\newblock \emph{Iclr}, 1\penalty0 (2):\penalty0 3, 2022.
+
+\bibitem[Huang et~al.(2024)Huang, Wu, Potts, Geva, and Geiger]{huang2024ravel}
+Jing Huang, Zhengxuan Wu, Christopher Potts, Mor Geva, and Atticus Geiger.
+\newblock {RAVEL}: Evaluating interpretability methods on disentangling language model representations.
+\newblock In \emph{Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)}, pp.\  8669--8687, Bangkok, Thailand, 2024. Association for Computational Linguistics.
+\newblock URL \url{https://aclanthology.org/2024.acl-long.470}.
+
+\bibitem[Hubinger et~al.(2023)Hubinger, Schiefer, Denison, and Perez]{hubinger2023model_organism}
+Evan Hubinger, Nicholas Schiefer, Carson Denison, and Ethan Perez.
+\newblock Model organisms of misalignment: The case for a new pillar of alignment research.
+\newblock \emph{LessWrong}, 2023.
+\newblock AI Alignment Forum post.
+
+\bibitem[Hubinger et~al.(2024)Hubinger, Denison, Mu, Lambert, Tong, MacDiarmid, Lanham, Ziegler, Maxwell, Cheng, Jermyn, Askell, Radhakrishnan, Anil, Duvenaud, Ganguli, Barez, Clark, Ndousse, Sachan, Sellitto, Sharma, DasSarma, Grosse, Kravec, Bai, Witten, Favaro, Brauner, Karnofsky, Christiano, Bowman, Graham, Kaplan, Mindermann, Greenblatt, Shlegeris, Schiefer, and Perez]{hubinger2024sleeper}
+Evan Hubinger, Carson Denison, Jesse Mu, Mike Lambert, Meg Tong, Monte MacDiarmid, Tamera Lanham, Daniel~M. Ziegler, Tim Maxwell, Newton Cheng, Adam Jermyn, Amanda Askell, Ansh Radhakrishnan, Cem Anil, David Duvenaud, Deep Ganguli, Fazl Barez, Jack Clark, Kamal Ndousse, Kshitij Sachan, Michael Sellitto, Mrinank Sharma, Nova DasSarma, Roger Grosse, Shauna Kravec, Yuntao Bai, Zachary Witten, Marina Favaro, Jan Brauner, Holden Karnofsky, Paul Christiano, Samuel~R. Bowman, Logan Graham, Jared Kaplan, Sören Mindermann, Ryan Greenblatt, Buck Shlegeris, Nicholas Schiefer, and Ethan Perez.
+\newblock Sleeper agents: Training deceptive llms that persist through safety training, 2024.
+\newblock URL \url{https://arxiv.org/abs/2401.05566}.
+
+\bibitem[Jafari et~al.(2025)Jafari, Eberle, Khakzar, and Nanda]{relp2025}
+Farnoush~Rezaei Jafari, Oliver Eberle, Ashkan Khakzar, and Neel Nanda.
+\newblock Relp: Faithful and efficient circuit discovery in language models via relevance patching.
+\newblock \emph{arXiv preprint arXiv:2508.21258}, 2025.
+
+\bibitem[Lieberum et~al.(2024)Lieberum, Rajamanoharan, Conmy, Smith, Sonnerat, Varma, Kram{\'a}r, Dragan, Shah, and Nanda]{gemmascope2024}
+Tom Lieberum, Senthooran Rajamanoharan, Arthur Conmy, Lewis Smith, Nicolas Sonnerat, Vikrant Varma, J{\'a}nos Kram{\'a}r, Anca Dragan, Rohin Shah, and Neel Nanda.
+\newblock Gemma scope: Open sparse autoencoders everywhere all at once on gemma 2.
+\newblock In \emph{Proceedings of the 7th BlackboxNLP Workshop: Analyzing and Interpreting Neural Networks for NLP}, pp.\  278--300, 2024.
+
+\bibitem[Mallen et~al.(2023)Mallen, Brumley, Kharchenko, and Belrose]{mallen2023quirky}
+Alex Mallen, Madeline Brumley, Julia Kharchenko, and Nora Belrose.
+\newblock Eliciting latent knowledge from quirky language models.
+\newblock \emph{arXiv preprint arXiv:2312.01037}, 2023.
+
+\bibitem[Marks et~al.(2025)Marks, Treutlein, Bricken, Lindsey, Marcus, Mishra-Sharma, Ziegler, Ameisen, Batson, Belonax, Bowman, Carter, Chen, Cunningham, Denison, Dietz, Golechha, Khan, Kirchner, Leike, Meek, Nishimura-Gasparian, Ong, Olah, Pearce, Roger, Salle, Shih, Tong, Thomas, Rivoire, Jermyn, MacDiarmid, Henighan, and Hubinger]{marks2025auditing}
+Samuel Marks, Johannes Treutlein, Trenton Bricken, Jack Lindsey, Jonathan Marcus, Siddharth Mishra-Sharma, Daniel Ziegler, Emmanuel Ameisen, Joshua Batson, Tim Belonax, Samuel~R. Bowman, Shan Carter, Brian Chen, Hoagy Cunningham, Carson Denison, Florian Dietz, Satvik Golechha, Akbir Khan, Jan Kirchner, Jan Leike, Austin Meek, Kei Nishimura-Gasparian, Euan Ong, Christopher Olah, Adam Pearce, Fabien Roger, Jeanne Salle, Andy Shih, Meg Tong, Drake Thomas, Kelley Rivoire, Adam Jermyn, Monte MacDiarmid, Tom Henighan, and Evan Hubinger.
+\newblock Auditing language models for hidden objectives, 2025.
+\newblock URL \url{https://arxiv.org/abs/2503.10965}.
+
+\bibitem[Mueller et~al.(2025)Mueller, Geiger, Wiegreffe, Arad, Arcuschin, Belfki, Chan, Fiotto-Kaufman, Haklay, Hanna, et~al.]{mueller2025mib}
+Aaron Mueller, Atticus Geiger, Sarah Wiegreffe, Dana Arad, Iv{\'a}n Arcuschin, Adam Belfki, Yik~Siu Chan, Jaden~Fried Fiotto-Kaufman, Tal Haklay, Michael Hanna, et~al.
+\newblock Mib: A mechanistic interpretability benchmark.
+\newblock In \emph{Forty-second International Conference on Machine Learning}, 2025.
+
+\bibitem[Needham et~al.(2025)Needham, Edkins, Pimpale, Bartsch, and Hobbhahn]{needham2025evaluation}
+Joe Needham, Giles Edkins, Govind Pimpale, Henning Bartsch, and Marius Hobbhahn.
+\newblock Large language models often know when they are being evaluated.
+\newblock \emph{arXiv preprint arXiv:2505.23836}, 2025.
+
+\bibitem[nostalgebraist(2020)]{nostalgebraist2020logitlens}
+nostalgebraist.
+\newblock interpreting gpt: the logit lens, August 2020.
+\newblock URL \url{https://www.lesswrong.com/posts/AcKRB8wDpdaN6v6ru/interpreting-gpt-the-logit-lens}.
+
+\bibitem[Rai et~al.(2024)Rai, Zhou, Feng, Saparov, and Yao]{rai2024practicalreview}
+Daking Rai, Yilun Zhou, Shi Feng, Abulhair Saparov, and Ziyu Yao.
+\newblock A practical review of mechanistic interpretability for transformer-based language models.
+\newblock \emph{arXiv preprint arXiv:2407.02646}, 2024.
+\newblock ICML 2025 Tutorial.
+
+\bibitem[Sharkey et~al.(2025)Sharkey, Chughtai, Batson, Lindsey, Wu, Bushnaq, Goldowsky-Dill, Heimersheim, Ortega, Bloom, Biderman, Garriga-Alonso, Conmy, Nanda, Rumbelow, Wattenberg, Schoots, Miller, Michaud, Casper, Tegmark, Saunders, Bau, Todd, Geiger, Geva, Hoogland, Murfet, and McGrath]{sharkey2025open}
+Lee Sharkey, Bilal Chughtai, Joshua Batson, Jack Lindsey, Jeff Wu, Lucius Bushnaq, Nicholas Goldowsky-Dill, Stefan Heimersheim, Alejandro Ortega, Joseph Bloom, Stella Biderman, Adria Garriga-Alonso, Arthur Conmy, Neel Nanda, Jessica Rumbelow, Martin Wattenberg, Nandi Schoots, Joseph Miller, Eric~J. Michaud, Stephen Casper, Max Tegmark, William Saunders, David Bau, Eric Todd, Atticus Geiger, Mor Geva, Jesse Hoogland, Daniel Murfet, and Tom McGrath.
+\newblock Open problems in mechanistic interpretability, 2025.
+\newblock URL \url{https://arxiv.org/abs/2501.16496}.
+
+\bibitem[Sheshadri et~al.(2026)Sheshadri, Ewart, Fronsdal, Gupta, Bowman, Price, Marks, and Wang]{auditbench2026}
+Abhay Sheshadri, Aidan Ewart, Kai Fronsdal, Isha Gupta, Samuel~R. Bowman, Sara Price, Samuel Marks, and Rowan Wang.
+\newblock Auditbench: Evaluating alignment auditing techniques on models with hidden behaviors.
+\newblock \emph{arXiv preprint arXiv:2602.22755}, 2026.
+
+\bibitem[Team et~al.(2024)Team, Riviere, Pathak, Sessa, Hardin, Bhupatiraju, Hussenot, Mesnard, Shahriari, Ram{\'e}, et~al.]{gemma2team2024}
+Gemma Team, Morgane Riviere, Shreya Pathak, Pier~Giuseppe Sessa, Cassidy Hardin, Surya Bhupatiraju, L{\'e}onard Hussenot, Thomas Mesnard, Bobak Shahriari, Alexandre Ram{\'e}, et~al.
+\newblock Gemma 2: Improving open language models at a practical size.
+\newblock \emph{arXiv preprint arXiv:2408.00118}, 2024.
+
+\bibitem[Turpin et~al.(2023)Turpin, Michael, Perez, and Bowman]{turpin2024language}
+Miles Turpin, Julian Michael, Ethan Perez, and Samuel Bowman.
+\newblock Language models don't always say what they think: Unfaithful explanations in chain-of-thought prompting.
+\newblock \emph{Advances in Neural Information Processing Systems}, 36:\penalty0 74952--74965, 2023.
+
+\end{thebibliography}
