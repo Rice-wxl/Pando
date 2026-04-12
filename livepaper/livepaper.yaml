@@ -5,11 +5,13 @@ setup: |
   One-time setup:
     git clone https://github.com/AR-FORUM/Pando.git
     cd Pando
-    pip install -r requirements.txt
+    pip install -r requirements-repro.txt
 
-    # Download cached evaluation results from HuggingFace (~3 GB)
-    hf download pando-dataset/evaluation-results \
-      --repo-type dataset --local-dir outputs/
+    # Download cached evaluation results (~1.4 GB zip)
+    hf download pando-dataset/evaluation-results-zip \
+      --repo-type dataset --local-dir /tmp/eval-zip
+    unzip /tmp/eval-zip/evaluation-results.zip -d .
+
   This populates outputs/evaluations/ (74 batch directories) and
   outputs/sensitivity_cache.json. No GPU or API keys are required
   for reproducing table values.
