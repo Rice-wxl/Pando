@@ -239,9 +239,9 @@ Other methods show the opposite pattern: field identity dominates ($R^2_{\text{f
 
 | Setup | gradient Acc | gradient F1 | relp Acc | relp F1 | Final Acc | Final F1 |
 |---|---:|---:|---:|---:|---:|---:|
-| Car purchase (ID) | [76.8±3.9](#=ar_gradient_id_acc) | [72.6±5.5](#=ar_gradient_id_f1) | [80.7±3.7](#=ar_relp_id_acc) | [80.1±4.7](#=ar_relp_id_f1) | **[82.7±3.3](#=ar_final_id_acc)** | **[85.0±3.4](#=ar_final_id_f1)** |
-| Other scenarios (OOD) | [78.4±2.7](#=ar_gradient_ood_acc) | [74.1±3.8](#=ar_gradient_ood_f1) | [79.2±2.5](#=ar_relp_ood_acc) | [77.5±3.4](#=ar_relp_ood_f1) | **[80.6±2.5](#=ar_final_ood_acc)** | **[80.5±3.1](#=ar_final_ood_f1)** |
-| Unfaithful (also OOD) | [77.6±2.2](#=ar_gradient_unf_acc) | [73.7±3.1](#=ar_gradient_unf_f1) | [78.7±2.1](#=ar_relp_unf_acc) | [75.6±3.1](#=ar_relp_unf_f1) | **[79.5±2.1](#=ar_final_unf_acc)** | **[77.5±2.9](#=ar_final_unf_f1)** |
+| Car purchase (ID) | 76.8±3.9 | 72.6±5.5 | 80.7±3.7 | 80.1±4.7 | **82.7±3.3** | **85.0±3.4** |
+| Other scenarios (OOD) | 78.4±2.7 | 74.1±3.8 | 79.2±2.5 | 77.5±3.4 | **80.6±2.5** | **80.5±3.1** |
+| Unfaithful (also OOD) | 77.6±2.2 | 73.7±3.1 | 78.7±2.1 | 75.6±3.1 | **79.5±2.1** | **77.5±2.9** |
 
 Figure 4 caption: **Top**: progression over [~25.5 hours](#=ar_duration) ([78](#=ar_experiments) experiments); dashed lines show `relp` baselines; vertical gray lines mark human interactions. **Bottom**: final results (90% CIs). The improvements from `gradient` → `relp` and `relp` → the final agent are comparable in magnitude, with most gains within CI overlap.
 

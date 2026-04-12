@@ -364,44 +364,6 @@ ar_holdout_models:
   <<: *autoresearch
   detail: "Holdout eval mode uses 66 unseen models."
 
-# Final-agent comparison table (under Figure 4)
-ar_gradient_id_acc:
-  <<: *ar_final_results
-ar_gradient_id_f1:
-  <<: *ar_final_results
-ar_gradient_ood_acc:
-  <<: *ar_final_results
-ar_gradient_ood_f1:
-  <<: *ar_final_results
-ar_gradient_unf_acc:
-  <<: *ar_final_results
-ar_gradient_unf_f1:
-  <<: *ar_final_results
-ar_relp_id_acc:
-  <<: *ar_final_results
-ar_relp_id_f1:
-  <<: *ar_final_results
-ar_relp_ood_acc:
-  <<: *ar_final_results
-ar_relp_ood_f1:
-  <<: *ar_final_results
-ar_relp_unf_acc:
-  <<: *ar_final_results
-ar_relp_unf_f1:
-  <<: *ar_final_results
-ar_final_id_acc:
-  <<: *ar_final_results
-ar_final_id_f1:
-  <<: *ar_final_results
-ar_final_ood_acc:
-  <<: *ar_final_results
-ar_final_ood_f1:
-  <<: *ar_final_results
-ar_final_unf_acc:
-  <<: *ar_final_results
-ar_final_unf_f1:
-  <<: *ar_final_results
-
 # ============================================================================
 # Sensitivity / data prep
 # ============================================================================
