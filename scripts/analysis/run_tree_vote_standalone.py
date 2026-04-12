@@ -75,19 +75,22 @@ def _load_module(name, path):
 _load_module("src", _repo / "src" / "__init__.py")
 _load_module("src.scenarios", _repo / "src" / "scenarios" / "__init__.py")
 _load_module("src.scenarios.base", _repo / "src" / "scenarios" / "base.py")
-_load_module("src.budget", _repo / "src" / "budget.py")
 
-# 2. Lightweight stubs for agent-infrastructure modules (only the
-#    TreeVoteAgent *class* uses these; the free functions do not).
+# 2. Lightweight stubs for modules that tree_vote.py imports at class
+#    definition time but that the four free functions never use at runtime.
+#    This avoids pulling in torch (via src.budget → src.inference).
+_dummy_class = type("_Dummy", (), {})
+_budget_stub = _types.ModuleType("src.budget")
+_budget_stub.BudgetExceededError = type("BudgetExceededError", (Exception,), {})
+_budget_stub.BudgetTracker = _dummy_class
+_budget_stub.BudgetedModel = _dummy_class
+sys.modules["src.budget"] = _budget_stub
+
 _agents_stub = _types.ModuleType("src.agents")
 _agents_stub.__path__ = [str(_repo / "src" / "agents")]
 _agents_stub.__package__ = "src.agents"
 _agents_stub.register_agent = lambda name: (lambda cls: cls)
 sys.modules["src.agents"] = _agents_stub
-# Create stubs with dummy attributes that tree_vote.py imports by name.
-# The TreeVoteAgent class references these at definition time but the
-# four free functions never use them at runtime.
-_dummy_class = type("_Dummy", (), {})
 _stub_attrs = {
     "src.agents.base": {"AgentResult": _dummy_class},
     "src.agents.interp_llm_base": {},
