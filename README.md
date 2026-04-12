@@ -93,7 +93,6 @@ generated decision trees of configurable depth (d1-d4).
 | `circuit_tracer` | Circuit tracing (unfiltered, large context) | Activation patching |
 | `circuit_tracer_filtered` | Circuit tracing + keyword filtering (paper default) | Activation patching |
 | `tree_vote` | Decision tree voting ensemble | Embedding gradients |
-| `tree_vote_spread` | Tree voting + spread sampling | Embedding gradients |
 
 Plus baselines: `majority`, `nn`, `nn_spread`, `logreg`, `always_true/false`.
 
