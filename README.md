@@ -36,13 +36,15 @@ huggingface-cli download pando-dataset/car-purchase-freeform-std \
     --local-dir outputs/models/car-purchase-freeform-std
 
 # Run specific agents on one model (requires GPU + OPENAI_API_KEY)
+# --exclude-seen reports accuracy only on the 90 heldout samples
 python scripts/eval.py \
     --model-dir outputs/models/car-purchase-freeform-std/<model_name> \
-    --agents gradient relp blackbox
+    --agents gradient relp blackbox --exclude-seen
 
 # Run all agents
 python scripts/eval.py \
-    --model-dir outputs/models/car-purchase-freeform-std/<model_name>
+    --model-dir outputs/models/car-purchase-freeform-std/<model_name> \
+    --exclude-seen
 ```
 
 Each model directory contains `circuit.json` (the planted decision rule with
@@ -127,6 +129,10 @@ huggingface-cli download pando-dataset/evaluation-results \
 
 This populates `outputs/evaluations/` (74 batch directories, ~3 GB) and
 `outputs/sensitivity_cache.json`.
+
+Note: the cached evaluation JSONs store accuracy on all 100 inputs (not
+heldout-only). The analysis scripts below reconstruct heldout accuracy from
+`per_input_results` by excluding the ~10 queried indices.
 
 ### Tables and figures
 
