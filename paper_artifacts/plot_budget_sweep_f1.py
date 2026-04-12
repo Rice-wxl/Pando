@@ -10,7 +10,8 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
+REPO_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(REPO_ROOT))
 
 from src.circuits import compute_field_sensitivity
 from src.scenarios import get_scenario
@@ -20,7 +21,7 @@ from scripts.analysis.megatable import (
     save_sensitivity_cache as _mt_save_sensitivity_cache,
 )
 
-BASE = Path(__file__).resolve().parent / "outputs" / "evaluations"
+BASE = REPO_ROOT / "outputs" / "evaluations"
 
 # Budget sweep batch dirs (car_purchase only)
 BUDGET_BATCHES = {

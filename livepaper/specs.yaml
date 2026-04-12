@@ -175,7 +175,7 @@ auc_gradient_methods:
 auc_sae_chance:
   prompt: |
     The claim is that all SAE variants are at chance (~0.50 AUC).
-    Run: python scripts/analysis/analyze_interp_field_bias.py outputs/evaluations/batch_20260301_033718 outputs/evaluations/batch_20260301_033721 --agents sae_tfidf sae_raw sae_gradient
+    Run: python scripts/analysis/analyze_interp_field_bias.py outputs/evaluations/batch_20260301_033718 outputs/evaluations/batch_20260301_033721 --agents sae_tfidf sae_autointerp sae_gradient
     Verify the per-field AUC means for each SAE variant ~ 0.50.
 
 # ============================================================================
@@ -440,7 +440,7 @@ relp_vs_sampleonly_d2:
 tab_mechanistic:
   prompt: |
     Table 4 (variance decomposition). Reproduce all values via:
-      python scripts/analysis/analyze_value_bias.py outputs/evaluations/batch_20260301_033718 outputs/evaluations/batch_20260301_033721 --agents relp gradient sae_gradient sae_tfidf logit_lens_field sae_raw
+      python scripts/analysis/analyze_value_bias.py outputs/evaluations/batch_20260301_033718 outputs/evaluations/batch_20260301_033721 --agents relp gradient sae_gradient sae_tfidf logit_lens_field sae_autointerp
 
 tab_hyperparams:
   prompt: |
@@ -497,7 +497,7 @@ tab_field_pr:
 tab_perfield_auc:
   prompt: |
     Table 13 (per-field AUC). Reproduce via:
-      python scripts/analysis/analyze_interp_field_bias.py outputs/evaluations/batch_20260301_033718 outputs/evaluations/batch_20260301_033721 --agents relp gradient logit_lens_field sae_tfidf sae_raw sae_gradient
+      python scripts/analysis/analyze_interp_field_bias.py outputs/evaluations/batch_20260301_033718 outputs/evaluations/batch_20260301_033721 --agents relp gradient logit_lens_field sae_tfidf sae_autointerp sae_gradient
 
 fig_budget_sweep:
   prompt: |

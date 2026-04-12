@@ -7,7 +7,7 @@ setup: |
     cd Pando
     pip install -r requirements-repro.txt
 
-    # Download cached evaluation results (~1.4 GB zip)
+    # Download cached evaluation results (~1.4 GB zip, ~7 GB unzipped)
     hf download pando-dataset/evaluation-results-zip \
       --repo-type dataset --local-dir /tmp/eval-zip
     unzip /tmp/eval-zip/evaluation-results.zip -d .
