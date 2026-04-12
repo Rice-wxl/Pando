@@ -114,12 +114,22 @@ inputs. We report heldout-only accuracy. (We do not allow active sampling for th
 
 ### Download evaluation data
 
+**Option A** — single zip (recommended, avoids rate-limiting):
+
+```bash
+hf download pando-dataset/evaluation-results-zip \
+    --repo-type dataset --local-dir /tmp/eval-zip
+unzip /tmp/eval-zip/evaluation-results.zip -d .
+```
+
+**Option B** — individual files via HF:
+
 ```bash
 hf download pando-dataset/evaluation-results \
     --repo-type dataset --local-dir outputs/
 ```
 
-This populates `outputs/evaluations/` (74 batch directories, ~3 GB) and
+Both populate `outputs/evaluations/` (74 batch directories, ~3 GB) and
 `outputs/sensitivity_cache.json`. The cached JSONs store predictions on all
 100 inputs; the analysis scripts below reconstruct heldout accuracy from
 `per_input_results` by excluding the ~10 queried indices.
