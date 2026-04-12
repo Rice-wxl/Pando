@@ -1,13 +1,19 @@
 title: "🌳 Pando: Do Interpretability Methods Work When Models Won't Explain Themselves?"
 setup: |
-  Help me navigate this replicable livepaper. Clone https://github.com/fjzzq2002/scaling_interp_bench.git
-  (and switch into it). The repo ships with all eval data needed to reproduce
-  every paper number — no GPU or API keys required for the table values.
+  Help me navigate this replicable livepaper for the Pando benchmark.
 
   One-time setup:
+    git clone https://github.com/AR-FORUM/Pando.git
+    cd Pando
     pip install -r requirements.txt
-    # The eval data lives in outputs/evaluations/ (already in the repo).
-    # The sensitivity cache lives in outputs/sensitivity_cache.json (already in the repo).
+
+    # Download cached evaluation results from HuggingFace (~3 GB)
+    huggingface-cli download pando-dataset/evaluation-results \
+      --repo-type dataset --local-dir outputs/
+
+  This populates outputs/evaluations/ (74 batch directories) and
+  outputs/sensitivity_cache.json. No GPU or API keys are required
+  for reproducing table values.
 
   Most table values can be reproduced with:
     python scripts/analysis/generate_tables.py --output /tmp/tables.md
@@ -16,5 +22,5 @@ setup: |
   have their own dedicated script — see the spec for each marker for the
   exact command.
 
-  You are now ready to replicate any result. Click on any blue-underlined
+  You are now ready to replicate any result. Click on any highlighted
   number to see the exact command to verify it.

@@ -13,7 +13,7 @@ constraints.
 ## Use the benchmark
 
 Pando provides pre-trained model organisms so you can evaluate interpretability
-methods without training from scratch. The 1,319 LoRA adapters (Gemma 2 2B-it)
+methods without training from scratch. The model organisms
 are hosted on HuggingFace under
 [pando-dataset](https://huggingface.co/pando-dataset), organized into 17 repos
 by scenario and training configuration.
