@@ -128,7 +128,13 @@ def main():
     parser.add_argument(
         "--fixed-prompt-budget",
         action="store_true",
-        help="Use fixed per-prompt budget (each inference costs 1, regardless of tokens or backward pass). Default --budget becomes 10.",
+        default=True,
+        help="Use fixed per-prompt budget (each inference costs 1, regardless of tokens or backward pass). Default --budget becomes 10. Enabled by default.",
+    )
+    parser.add_argument(
+        "--token-budget",
+        action="store_true",
+        help="Use token-based budget instead of fixed per-prompt budget.",
     )
     parser.add_argument(
         "--update-batch",
@@ -163,6 +169,10 @@ def main():
     )
 
     args = parser.parse_args()
+
+    # --token-budget overrides the default --fixed-prompt-budget=True
+    if args.token_budget:
+        args.fixed_prompt_budget = False
 
     # Default budget to 10 when using fixed prompt budget (unless explicitly overridden)
     if args.fixed_prompt_budget and args.budget == DEFAULT_BUDGET:

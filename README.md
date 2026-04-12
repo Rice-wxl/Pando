@@ -2,7 +2,7 @@
 
 Ziqian Zhong, Aashiq Muhamed, Mona T. Diab, Virginia Smith, Aditi Raghunathan
 
-[📝 Arxiv](TODO) | [🖇️ Livepaper](https://ar-forum.github.io/pando/livepaper.html) | [📦 Dataset](https://huggingface.co/pando-dataset) | [🌐 Website](https://ar-forum.github.io/pando/)
+[📝 Arxiv](TODO) | [🖇️ Livepaper](https://ar-forum.github.io/Pando/livepaper.html) | [📦 Dataset](https://huggingface.co/pando-dataset) | [🌐 Website](https://ar-forum.github.io/Pando/)
 
 Pando is a benchmark for evaluating interpretability methods on language models
 with known ground-truth decision rules. We fine-tune 1000+ "model organisms" —
@@ -38,12 +38,13 @@ huggingface-cli download pando-dataset/car-purchase-freeform-std \
 # --exclude-seen reports accuracy only on the 90 heldout samples
 python scripts/eval.py \
     --model-dir outputs/models/car-purchase-freeform-std/<model_name> \
-    --agents gradient relp blackbox --exclude-seen
+    --agents gradient relp blackbox \
+    --fixed-prompt-budget --budget 10 --exclude-seen
 
 # Run all agents
 python scripts/eval.py \
     --model-dir outputs/models/car-purchase-freeform-std/<model_name> \
-    --exclude-seen
+    --fixed-prompt-budget --budget 10 --exclude-seen
 ```
 
 Each model directory contains `circuit.json` (the planted decision rule with
@@ -148,7 +149,7 @@ sensitivity scores (0-1), used as ground truth for field-F1 metrics.
 
 ### Live paper
 
-[`livepaper/`](livepaper/) contains a more agent-replication-friendly version of the paper generated with the [livepaper](https://github.com/AR-FORUM/livepaper) harness. Please refer to the [livepaper version of the paper](https://ar-forum.github.io/pando/livepaper.html) for more details.
+[`livepaper/`](livepaper/) contains a more agent-replication-friendly version of the paper generated with the [livepaper](https://github.com/fjzzq2002/livepaper) harness. Please refer to the [livepaper version of the paper](https://ar-forum.github.io/Pando/livepaper.html) for more details.
 
 ## Citation
 
