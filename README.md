@@ -79,14 +79,22 @@ generated decision trees of configurable depth (d1-d4).
 |-------|----------|-------------|
 | `blackbox` | GPT pattern discovery | None |
 | `gradient` | Alternating fwd/bwd gradient saliency | Embedding gradients |
+| `gradient_v1` | Forward-only gradient saliency | Embedding gradients |
 | `relp` | RelP-modified gradients | LRP-rule gradients |
 | `logit_lens` | Logit lens projections | Vocabulary projections |
+| `logit_lens_field` | Per-field logit lens | Vocabulary projections |
 | `prefill` | Prefill extraction | Forced-decoding |
 | `sae_tfidf` | SAE feature TF-IDF | Sparse autoencoder |
+| `sae_tfidf_filtered` | SAE TF-IDF + keyword filtering | Sparse autoencoder |
 | `sae_gradient` | SAE gradient attribution | Sparse autoencoder |
+| `sae_autointerp` | SAE + Neuronpedia descriptions | Sparse autoencoder |
+| `sae_mean_diff` | SAE mean activation difference | Sparse autoencoder |
+| `sae_token` | SAE token-level features | Sparse autoencoder |
 | `res_token` | Residual token similarity | Residual stream |
 | `circuit_tracer` | Circuit tracing | Activation patching |
-| `codex_read` | All methods + Codex CLI | Multi-tool |
+| `circuit_tracer_filtered` | Circuit tracing + keyword filtering | Activation patching |
+| `tree_vote` | Decision tree voting ensemble | Embedding gradients |
+| `tree_vote_spread` | Tree voting + spread sampling | Embedding gradients |
 
 Plus baselines: `majority`, `nn`, `nn_spread`, `logreg`, `always_true/false`.
 
@@ -143,10 +151,10 @@ sensitivity scores (0-1), used as ground truth for field-F1 metrics.
 ## Citation
 
 ```bibtex
-@inproceedings{zhong2026pando,
+@article{zhong2026pando,
   title   = {Pando: Do Interpretability Methods Work When Models Won't Explain Themselves?},
   author  = {Zhong, Ziqian and Muhamed, Aashiq and Diab, Mona T. and Smith, Virginia and Raghunathan, Aditi},
-  booktitle = {Conference on Language Modeling (COLM)},
+  journal = {arXiv preprint arXiv:XXXX.XXXXX},
   year    = {2026}
 }
 ```
