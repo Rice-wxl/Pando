@@ -98,6 +98,9 @@ def load_models(batch_dirs):
             source_model_dir = Path(config.get("model_dir", ""))
             circuit_path = source_model_dir / "circuit.json"
             if not circuit_path.exists():
+                # Fallback: look in the eval batch dir (for HF-downloaded artifacts)
+                circuit_path = model_dir / "circuit.json"
+            if not circuit_path.exists():
                 continue
             with open(circuit_path) as f:
                 circuit_data = json.load(f)
