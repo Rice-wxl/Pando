@@ -103,9 +103,6 @@ balanced) and a **fixed budget** of interactions with the model (default: ~10
 forward passes worth of tokens). The agent must maximize prediction accuracy
 on those 100 inputs.
 
-The benchmark also supports a **non-split scoring mode** where the agent can
-use the full budget freely across all 100 inputs.
-
 In the paper (and the agents listed above), we use a **visible/heldout split**:
 10 inputs are designated as *visible* (the agent can query the model on these
 and observe the outputs), and the remaining 90 are *heldout* (the agent must
