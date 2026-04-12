@@ -94,7 +94,27 @@ generated decision trees of configurable depth (d1-d4).
 | `circuit_tracer_filtered` | Circuit tracing + keyword filtering (paper default) | Activation patching |
 | `tree_vote` | Decision tree voting ensemble | Embedding gradients |
 
-Plus baselines: `majority`, `nn`, `nn_spread`, `logreg`, `always_true/false`.
+Plus baselines: `majority`, `nn`, `logreg`, `always_true/false`.
+
+### Scoring
+
+Given a model organism, the benchmark presents **100 test inputs** (50/50
+balanced) and a **fixed budget** of interactions with the model (default: ~10
+forward passes worth of tokens). The agent must maximize prediction accuracy
+on those 100 inputs.
+
+The benchmark also supports a **non-split scoring mode** where the agent can
+use the full budget freely across all 100 inputs.
+
+In the paper (and the agents listed above), we use a **visible/heldout split**:
+10 inputs are designated as *visible* (the agent can query the model on these
+and observe the outputs), and the remaining 90 are *heldout* (the agent must
+predict without seeing the model's answers). The visible set is determined by
+seeded sampling -- every agent uses the same seed, guaranteeing identical
+partitions. We report accuracy only on the 90 heldout inputs, not the full 100.
+
+Scores can be further improved by choosing more representative samples to
+query, rather than using the fixed random visible/heldout partition.
 
 ## Reproduce the paper
 
