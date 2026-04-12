@@ -2,12 +2,12 @@
 
 Ziqian Zhong, Aashiq Muhamed, Mona T. Diab, Virginia Smith, Aditi Raghunathan
 
-[Paper (PDF)](paper_artifacts/colm2026_conference.pdf) | [Live Paper](livepaper/dist/index.html)
+[📝 Arxiv](TODO) | [🖇️ Livepaper](https://ar-forum.github.io/pando/livepaper.html) | [📦 Dataset](https://huggingface.co/pando-dataset) | [🌐 Website](https://ar-forum.github.io/pando/)
 
 Pando is a benchmark for evaluating interpretability methods on language models
-with known ground-truth decision rules. We fine-tune 1,319 "model organisms" —
-small LMs with planted decision-tree circuits — and measure whether 17
-interpretability agents can recover the hidden rules under realistic budget
+with known ground-truth decision rules. We fine-tune 1000+ "model organisms" —
+small LMs with planted decision-tree circuits — and measure whether
+interpretability agents can recover the hidden rules under budget
 constraints.
 
 ## Use the benchmark
@@ -29,8 +29,7 @@ pip install -r requirements.txt
 ### Running agents on existing model organisms
 
 ```bash
-# Download a model organism from HuggingFace
-# (or use a local path to a LoRA adapter you trained yourself)
+# Download a set of model organisms from HuggingFace
 pip install huggingface_hub
 huggingface-cli download pando-dataset/car-purchase-freeform-std \
     --local-dir outputs/models/car-purchase-freeform-std
@@ -49,7 +48,6 @@ python scripts/eval.py \
 
 Each model directory contains `circuit.json` (the planted decision rule with
 causal field sensitivities) and `validation.json` (2,000 pre-scored samples),
-so you can verify ground truth without re-running inference.
 
 ### Training new model organisms
 
@@ -80,7 +78,7 @@ generated decision trees of configurable depth (d1-d4).
 | Agent | Strategy | Interp tool |
 |-------|----------|-------------|
 | `blackbox` | GPT pattern discovery | None |
-| `gradient` | Alternating fwd/bwd gradient saliency | Embedding gradients |
+| `gradient` | Gradient saliency | Embedding gradients |
 | `relp` | RelP-modified gradients | LRP-rule gradients |
 | `logit_lens` | Logit lens projections | Vocabulary projections |
 | `logit_lens_field` | Per-field logit lens | Vocabulary projections |
@@ -100,14 +98,12 @@ Plus baselines: `majority`, `nn`, `logreg`, `always_true/false`.
 
 ## Reproduce the paper
 
-All tables and figures can be reproduced from cached evaluation results -- no
-GPU or API keys needed.
+For reproducing the paper, we additionally provide cached evaluation results, so you could verify them without re-running inference.
 
-Each evaluation presents 100 test inputs (50/50 balanced). The agent spends a
+Each evaluation presents 100 test inputs (50/50 balanced). The agent has a
 budget of ~10 forward passes querying the model on a seeded subset (~10 visible
 inputs, identical across agents), then predicts the remaining ~90 heldout
-inputs. We report heldout-only accuracy. (The fixed random partition leaves
-room for improvement via active sampling.)
+inputs. We report heldout-only accuracy. (We do not allow active sampling for the main experiments.)
 
 ### Download evaluation data
 
@@ -135,12 +131,6 @@ This populates `outputs/evaluations/` (74 batch directories, ~3 GB) and
 | Figure 3 (budget sweep) | `python paper_artifacts/plot_budget_sweep.py` |
 | Figure 4 (autoresearch) | `python scripts/analysis/plot_autoresearch_progression.py` |
 
-### Live paper
-
-Every underlined number in the paper links to a replication spec. Open
-`livepaper/dist/index.html` in a browser and click any value to see the exact
-command that produces it.
-
 ## Eval data format
 
 Each `outputs/evaluations/batch_*/` directory holds one eval run. Each model
@@ -155,6 +145,10 @@ subdirectory contains:
 
 `outputs/sensitivity_cache.json` maps circuit expressions to per-field causal
 sensitivity scores (0-1), used as ground truth for field-F1 metrics.
+
+### Live paper
+
+[`livepaper/`](livepaper/) contains a more agent-replication-friendly version of the paper generated with the [livepaper](https://github.com/AR-FORUM/livepaper) harness. Please refer to the [livepaper version of the paper](https://ar-forum.github.io/pando/livepaper.html) for more details.
 
 ## Citation
 
