@@ -105,6 +105,7 @@ from . import blackbox_prefill  # noqa: E402, F401
 from . import sample_then_relp_llm  # noqa: E402, F401
 from . import codex_read  # noqa: E402, F401
 from . import tree_vote  # noqa: E402, F401
+from . import autoresearch  # noqa: E402, F401
 
 __all__ = [
     "BaseAgent",

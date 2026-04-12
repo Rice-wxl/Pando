@@ -40,6 +40,13 @@ class InterpContext:
     prediction: bool | None = None
     inputs: dict[str, Any] | None = None
     response: str | None = None
+    probs: dict[str, float] | None = None
+
+
+def _sanitize_utf8(text: str) -> str:
+    """Sanitize text for safe JSON serialization in API calls."""
+    text = text.encode("utf-8", errors="replace").decode("utf-8")
+    return "".join(c for c in text if c.isprintable() or c in "\n\t ")
 
 
 def _truncate_prompt(prompt: str, max_tokens: int, tail_tokens: int) -> str:
@@ -86,6 +93,13 @@ class InterpLLMAgent(BaseAgent):
     name: str = "interp_llm_base"
     _query_with_backward: bool = False
 
+    # Opt-in features for autoresearch agents (all default False)
+    _pass_probs_to_context: bool = False
+    _sanitize_find_pattern: bool = False
+    _retry_find_pattern: bool = False
+    _sanitize_predict_pattern: bool = False
+    _retry_predict_pattern: bool = False
+
     def __init__(self, *args, format_style: str = "structured", **kwargs):
         super().__init__(*args, **kwargs)
         self.format_style = format_style
@@ -117,6 +131,19 @@ class InterpLLMAgent(BaseAgent):
         """
         ...
 
+    def _find_pattern_instruction(self) -> str:
+        """Return the instruction text for the find_pattern() GPT-5.1 prompt.
+
+        Override in subclasses to customize the prompt (e.g., 5-step verified prompt).
+        Default: the original production prompt.
+        """
+        return (
+            "Describe the decision rule as concisely as possible. "
+            "Focus on which fields matter and what conditions lead to Yes vs No. "
+            "Be specific about thresholds and values. Use Occam's Razor. "
+            "Reply with just the decision rule, no other text."
+        )
+
     def find_pattern(self) -> str:
         """Find decision pattern using GPT-5.1.
 
@@ -143,9 +170,12 @@ class InterpLLMAgent(BaseAgent):
 
 {io_pairs_text}
 {chr(10) + interp_text + chr(10) if interp_text else ""}
-Describe the decision rule as concisely as possible. Focus on which fields matter and what conditions lead to Yes vs No. Be specific about thresholds and values. Use Occam's Razor. Reply with just the decision rule, no other text."""
+{self._find_pattern_instruction()}"""
 
         prompt = _truncate_prompt(prompt, MAX_PROMPT_TOKENS, TAIL_PRESERVE_TOKENS)
+
+        if self._sanitize_find_pattern:
+            prompt = _sanitize_utf8(prompt)
 
         self.pattern_prompt = prompt
 
@@ -153,14 +183,34 @@ Describe the decision rule as concisely as possible. Focus on which fields matte
             self.save_dry_run_prompt(prompt, "find_pattern")
             return "[DRY RUN - NO PATTERN]"
 
-        response = litellm.completion(
-            model="openai/gpt-5.1",
-            messages=[{"role": "user", "content": prompt}],
-            allowed_openai_params=['reasoning_effort'],
-            reasoning_effort="high",
-        )
+        if self._retry_find_pattern:
+            for attempt in range(2):
+                try:
+                    response = litellm.completion(
+                        model="openai/gpt-5.1",
+                        messages=[{"role": "user", "content": prompt}],
+                        allowed_openai_params=['reasoning_effort'],
+                        reasoning_effort="high",
+                    )
+                    break
+                except Exception as e:
+                    if attempt == 0 and ("JSON" in str(e) or "parse" in str(e).lower()
+                                        or "BadRequest" in type(e).__name__):
+                        print(f"  Retrying find_pattern after error: {e}")
+                        prompt = prompt.encode("ascii", errors="ignore").decode("ascii")
+                        continue
+                    raise
+        else:
+            response = litellm.completion(
+                model="openai/gpt-5.1",
+                messages=[{"role": "user", "content": prompt}],
+                allowed_openai_params=['reasoning_effort'],
+                reasoning_effort="high",
+            )
 
         pattern = response.choices[0].message.content.strip()
+        if self._sanitize_find_pattern:
+            pattern = _sanitize_utf8(pattern)
         print(f'{pattern=}')
         print(f'Used tokens: {response.usage.total_tokens} / {response.usage.prompt_tokens} / {response.usage.completion_tokens}')
         return pattern
@@ -198,7 +248,10 @@ Describe the decision rule as concisely as possible. Focus on which fields matte
                 # 1. Predict (CHARGED)
                 prediction, probs = self.model.predict_yes_no(prompt)
                 # 2. Run interp (FREE, except gradient/relp)
-                ctx = InterpContext(prompt=prompt, prediction=prediction, inputs=test_inputs[idx])
+                ctx = InterpContext(
+                    prompt=prompt, prediction=prediction, inputs=test_inputs[idx],
+                    probs=probs if self._pass_probs_to_context else None,
+                )
                 interp_data = self.run_interp(ctx)
 
                 predictions[idx] = prediction
@@ -282,15 +335,35 @@ Input: {{{input_text}}}
 
 Based on the rule above, should the output be Yes or No? Answer with just "Yes" or "No"."""
 
-        response = await litellm.acompletion(
-            model="openai/gpt-4.1",
-            messages=[{"role": "user", "content": prompt}],
-            temperature=0.0,
-            max_tokens=10,
-        )
+        if self._sanitize_predict_pattern:
+            prompt = _sanitize_utf8(prompt)
 
-        answer = response.choices[0].message.content.strip().lower()
-        return answer.startswith("yes")
+        if self._retry_predict_pattern:
+            for attempt in range(2):
+                try:
+                    response = await litellm.acompletion(
+                        model="openai/gpt-4.1",
+                        messages=[{"role": "user", "content": prompt}],
+                        temperature=0.0,
+                        max_tokens=10,
+                    )
+                    answer = response.choices[0].message.content.strip().lower()
+                    return answer.startswith("yes")
+                except Exception as e:
+                    if attempt == 0:
+                        prompt = prompt.encode("ascii", errors="ignore").decode("ascii")
+                        continue
+                    print(f"  predict_with_pattern failed, defaulting to Yes: {e}")
+                    return True
+        else:
+            response = await litellm.acompletion(
+                model="openai/gpt-4.1",
+                messages=[{"role": "user", "content": prompt}],
+                temperature=0.0,
+                max_tokens=10,
+            )
+            answer = response.choices[0].message.content.strip().lower()
+            return answer.startswith("yes")
 
     # --- ESK (Eliciting Secret Knowledge) support ---
 
