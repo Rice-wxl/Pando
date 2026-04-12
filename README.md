@@ -21,7 +21,7 @@ by scenario and training configuration.
 ### Setup
 
 ```bash
-git clone https://github.com/AR-FORUM/pando.git
+git clone https://github.com/AR-FORUM/Pando.git
 cd pando
 pip install -r requirements.txt
 ```
