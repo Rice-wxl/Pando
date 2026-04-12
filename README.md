@@ -98,27 +98,16 @@ generated decision trees of configurable depth (d1-d4).
 
 Plus baselines: `majority`, `nn`, `logreg`, `always_true/false`.
 
-### Scoring
-
-Given a model organism, the benchmark presents **100 test inputs** (50/50
-balanced) and a **fixed budget** of interactions with the model (default: ~10
-forward passes worth of tokens). The agent must maximize prediction accuracy
-on those 100 inputs.
-
-In the paper (and the agents listed above), we use a **visible/heldout split**:
-10 inputs are designated as *visible* (the agent can query the model on these
-and observe the outputs), and the remaining 90 are *heldout* (the agent must
-predict without seeing the model's answers). The visible set is determined by
-seeded sampling -- every agent uses the same seed, guaranteeing identical
-partitions. We report accuracy only on the 90 heldout inputs, not the full 100.
-
-Scores can be further improved by choosing more representative samples to
-query, rather than using the fixed random visible/heldout partition.
-
 ## Reproduce the paper
 
 All tables and figures can be reproduced from cached evaluation results -- no
 GPU or API keys needed.
+
+Each evaluation presents 100 test inputs (50/50 balanced). The agent spends a
+budget of ~10 forward passes querying the model on a seeded subset (~10 visible
+inputs, identical across agents), then predicts the remaining ~90 heldout
+inputs. We report heldout-only accuracy. (The fixed random partition leaves
+room for improvement via active sampling.)
 
 ### Download evaluation data
 
@@ -128,10 +117,8 @@ huggingface-cli download pando-dataset/evaluation-results \
 ```
 
 This populates `outputs/evaluations/` (74 batch directories, ~3 GB) and
-`outputs/sensitivity_cache.json`.
-
-Note: the cached evaluation JSONs store accuracy on all 100 inputs (not
-heldout-only). The analysis scripts below reconstruct heldout accuracy from
+`outputs/sensitivity_cache.json`. The cached JSONs store predictions on all
+100 inputs; the analysis scripts below reconstruct heldout accuracy from
 `per_input_results` by excluding the ~10 queried indices.
 
 ### Tables and figures
