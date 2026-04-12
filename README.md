@@ -79,7 +79,6 @@ generated decision trees of configurable depth (d1-d4).
 |-------|----------|-------------|
 | `blackbox` | GPT pattern discovery | None |
 | `gradient` | Alternating fwd/bwd gradient saliency | Embedding gradients |
-| `gradient_v1` | Forward-only gradient saliency | Embedding gradients |
 | `relp` | RelP-modified gradients | LRP-rule gradients |
 | `logit_lens` | Logit lens projections | Vocabulary projections |
 | `logit_lens_field` | Per-field logit lens | Vocabulary projections |
@@ -91,8 +90,8 @@ generated decision trees of configurable depth (d1-d4).
 | `sae_mean_diff` | SAE mean activation difference | Sparse autoencoder |
 | `sae_token` | SAE token-level features | Sparse autoencoder |
 | `res_token` | Residual token similarity | Residual stream |
-| `circuit_tracer` | Circuit tracing | Activation patching |
-| `circuit_tracer_filtered` | Circuit tracing + keyword filtering | Activation patching |
+| `circuit_tracer` | Circuit tracing (unfiltered, large context) | Activation patching |
+| `circuit_tracer_filtered` | Circuit tracing + keyword filtering (paper default) | Activation patching |
 | `tree_vote` | Decision tree voting ensemble | Embedding gradients |
 | `tree_vote_spread` | Tree voting + spread sampling | Embedding gradients |
 
