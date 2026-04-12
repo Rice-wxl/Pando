@@ -31,7 +31,7 @@ pip install -r requirements.txt
 ```bash
 # Download a set of model organisms from HuggingFace
 pip install huggingface_hub
-huggingface-cli download pando-dataset/car-purchase-freeform-std \
+hf download pando-dataset/car-purchase-freeform-std \
     --local-dir outputs/models/car-purchase-freeform-std
 
 # Run specific agents on one model (requires GPU + OPENAI_API_KEY)
@@ -101,6 +101,12 @@ Plus baselines: `majority`, `nn`, `logreg`, `always_true/false`.
 
 For reproducing the paper, we additionally provide cached evaluation results, so you could verify them without re-running inference.
 
+You only need lightweight dependencies (no GPU, no API keys):
+
+```bash
+pip install -r requirements-repro.txt
+```
+
 Each evaluation presents 100 test inputs (50/50 balanced). The agent has a
 budget of ~10 forward passes querying the model on a seeded subset (~10 visible
 inputs, identical across agents), then predicts the remaining ~90 heldout
@@ -109,7 +115,7 @@ inputs. We report heldout-only accuracy. (We do not allow active sampling for th
 ### Download evaluation data
 
 ```bash
-huggingface-cli download pando-dataset/evaluation-results \
+hf download pando-dataset/evaluation-results \
     --repo-type dataset --local-dir outputs/
 ```
 

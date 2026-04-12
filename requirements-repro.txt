@@ -1,0 +1,5 @@
+# Minimal dependencies for reproducing cached table values and plots.
+# No GPU, no API keys, no training required.
+numpy
+scipy
+matplotlib

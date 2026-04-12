@@ -47,12 +47,73 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from src.agents.tree_vote import (
-    _build_candidate_thresholds,
-    _sample_tree,
-    _tree_consistent,
-    _field_frequencies,
-)
+# Import tree_vote helpers WITHOUT triggering src/agents/__init__.py
+# (which eagerly imports all agents and transitively requires torch).
+# We load tree_vote.py as an isolated module with lightweight stubs for
+# the agent-infrastructure imports it doesn't need for the four free
+# functions used here.
+import importlib.util as _ilu
+import types as _types
+
+_repo = Path(__file__).resolve().parents[2]
+
+def _load_module(name, path):
+    """Load a single .py file into sys.modules under *name*."""
+    path = Path(path)
+    # If loading a package __init__.py, set submodule_search_locations
+    # so that relative imports within the package resolve correctly.
+    kwargs = {}
+    if path.name == "__init__.py":
+        kwargs["submodule_search_locations"] = [str(path.parent)]
+    spec = _ilu.spec_from_file_location(name, str(path), **kwargs)
+    mod = _ilu.module_from_spec(spec)
+    sys.modules[name] = mod
+    spec.loader.exec_module(mod)
+    return mod
+
+# 1. Real modules that the helper functions actually use at runtime:
+_load_module("src", _repo / "src" / "__init__.py")
+_load_module("src.scenarios", _repo / "src" / "scenarios" / "__init__.py")
+_load_module("src.scenarios.base", _repo / "src" / "scenarios" / "base.py")
+_load_module("src.budget", _repo / "src" / "budget.py")
+
+# 2. Lightweight stubs for agent-infrastructure modules (only the
+#    TreeVoteAgent *class* uses these; the free functions do not).
+_agents_stub = _types.ModuleType("src.agents")
+_agents_stub.__path__ = [str(_repo / "src" / "agents")]
+_agents_stub.__package__ = "src.agents"
+_agents_stub.register_agent = lambda name: (lambda cls: cls)
+sys.modules["src.agents"] = _agents_stub
+# Create stubs with dummy attributes that tree_vote.py imports by name.
+# The TreeVoteAgent class references these at definition time but the
+# four free functions never use them at runtime.
+_dummy_class = type("_Dummy", (), {})
+_stub_attrs = {
+    "src.agents.base": {"AgentResult": _dummy_class},
+    "src.agents.interp_llm_base": {},
+    "src.agents.sae_base": {},
+    "src.agents.sampling": {
+        "compute_spread_order": None,
+        "get_available_fields": None,
+    },
+    "src.agents.sample_then_llm_guess": {
+        "SampleThenLLMGuessAgent": _dummy_class,
+    },
+}
+for _sn, _attrs in _stub_attrs.items():
+    _mod = _types.ModuleType(_sn)
+    for _k, _v in _attrs.items():
+        setattr(_mod, _k, _v)
+    sys.modules[_sn] = _mod
+
+# 3. Load tree_vote.py itself — stubs satisfy its class-level imports,
+#    and the four free functions only need FieldType from scenarios.base.
+_tv = _load_module("src.agents.tree_vote", _repo / "src" / "agents" / "tree_vote.py")
+_build_candidate_thresholds = _tv._build_candidate_thresholds
+_sample_tree = _tv._sample_tree
+_tree_consistent = _tv._tree_consistent
+_field_frequencies = _tv._field_frequencies
+
 from src.scenarios import get_scenario
 
 

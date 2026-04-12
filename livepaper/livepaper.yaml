@@ -8,9 +8,8 @@ setup: |
     pip install -r requirements.txt
 
     # Download cached evaluation results from HuggingFace (~3 GB)
-    huggingface-cli download pando-dataset/evaluation-results \
-      --repo-type dataset --local-dir outputs/ --resume-download
-
+    hf download pando-dataset/evaluation-results \
+      --repo-type dataset --local-dir outputs/
   This populates outputs/evaluations/ (74 batch directories) and
   outputs/sensitivity_cache.json. No GPU or API keys are required
   for reproducing table values.

@@ -503,13 +503,13 @@ fig_budget_sweep:
   prompt: |
     Figure 3 (held-out accuracy vs sample budget). Reproduce via:
       python paper_artifacts/plot_budget_sweep.py
-    The script writes plot_budget_sweep.png and plot_budget_sweep_f1.png and
-    prints per-budget values for every agent.
+    The script writes plot_budget_sweep.png and prints per-budget values
+    for every agent.
 
 fig_budget_f1:
   prompt: |
     Figure 5 (field F1 vs sample budget). Same script as Figure 3 — see
-    fig_budget_sweep. Writes plot_budget_sweep_f1.png.
+    fig_budget_sweep. Writes plot_budget_sweep.png.
 
 fig_autoresearch:
   prompt: |

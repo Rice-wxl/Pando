@@ -259,6 +259,10 @@ def load_models(batch_dirs: list[str]) -> list[dict]:
 
             source_model_dir = Path(config.get("model_dir", ""))
             circuit_path = source_model_dir / "circuit.json"
+            # Fallback: look for circuit.json in the eval batch model dir
+            # (HF artifact may not have the original model_dir)
+            if not circuit_path.exists():
+                circuit_path = model_dir / "circuit.json"
             if not circuit_path.exists():
                 continue
             with open(circuit_path) as f:
@@ -267,6 +271,8 @@ def load_models(batch_dirs: list[str]) -> list[dict]:
             # Load distractor circuit if present
             distractor_fields = []
             distractor_path = source_model_dir / "distractor_circuit.json"
+            if not distractor_path.exists():
+                distractor_path = model_dir / "distractor_circuit.json"
             if distractor_path.exists():
                 with open(distractor_path) as f:
                     distractor_data = json.load(f)
