@@ -154,7 +154,7 @@ Each `outputs/evaluations/batch_*/` directory holds one eval run. Each model
 subdirectory contains:
 
 - `config.json` -- model metadata (scenario, depth, training config)
-- `test_data.json` -- 100 held-out test samples (50/50 balanced)
+- `test_data.json` -- 100 test samples (50/50 balanced)
 - `agent_results/<agent>.json` -- per-agent predictions
   - `accuracy`, `correct`, `total`
   - `per_input_results` -- per-sample `{index, predicted, correct, ...}`
