@@ -508,8 +508,9 @@ fig_budget_sweep:
 
 fig_budget_f1:
   prompt: |
-    Figure 5 (field F1 vs sample budget). Same script as Figure 3 — see
-    fig_budget_sweep. Writes plot_budget_sweep.png.
+    Figure 5 (field F1 vs sample budget). Reproduce via:
+      python paper_artifacts/plot_budget_sweep_f1.py
+    The script writes plot_budget_sweep_f1.png.
 
 fig_autoresearch:
   prompt: |
