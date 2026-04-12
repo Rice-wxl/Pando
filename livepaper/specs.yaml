@@ -23,26 +23,15 @@ _templates:
   tree_voting: &tree_voting
     prompt: |
       `tree_vote` is a non-LLM baseline: it samples 200k candidate decision
-      trees from the 10 queried query–response pairs and votes. Because it
-      only needs the 10 cached labels (already in test_data.json) and the
-      tree sampling is deterministic (seeded Random(42)), we can reproduce
-      every tree_vote number without any GPU or API calls.
+      trees from the 10 queried query–response pairs and votes.
 
-      Run the standalone runner:
-        python scripts/analysis/run_tree_vote_standalone.py
-      This writes agent_results/tree_vote.json to every model directory in
-      the 18 freeform batches (9 configs × 2 slices). ~18 min on CPU.
-
-      Then regenerate the tables:
+      The released evaluation artifact already includes tree_vote.json for
+      every model, so no extra step is needed — just run:
         python scripts/analysis/generate_tables.py
       and find the tree_vote row in the appropriate section.
 
-      The standalone runner imports the exact tree-sampling helpers from
-      src/agents/tree_vote.py (_sample_tree, _tree_consistent,
-      _build_candidate_thresholds, _field_frequencies) and reproduces the
-      `seed=42 + random.shuffle` query order used by scripts/eval.py
-      --update-batch, so the output is bit-identical to running the real
-      agent.
+      To regenerate tree_vote.json from scratch (optional, ~18 min CPU):
+        python scripts/analysis/run_tree_vote_standalone.py
 
   # ─── Hyperparameter / config constants ────────────────────────────────
   # ─── Autoresearch / agent search ──────────────────────────────────────
@@ -436,13 +425,10 @@ tab_data_mixing:
 
 tab_tree_voting:
   prompt: |
-    Table 10 (tree voting accuracy). Reproduce via:
-      python scripts/analysis/run_tree_vote_standalone.py   # ~18 min, CPU only
+    Table 10 (tree voting accuracy). The released eval artifact already
+    includes tree_vote.json, so just run:
       python scripts/analysis/generate_tables.py
-    The standalone runner is a CPU-only re-implementation of scripts/eval.py
-    --update-batch tree_vote that uses cached test_data.json labels (see the
-    tree_voting template above). It writes tree_vote.json to every model dir;
-    generate_tables then picks the values up automatically.
+    and find the tree_vote row in the accuracy section.
 
 tab_tree_voting_f1:
   prompt: |

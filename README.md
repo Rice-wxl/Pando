@@ -143,7 +143,7 @@ Both populate `outputs/evaluations/` (74 batch directories, ~3 GB) and
 | Table 6 (full agent variants) | `python scripts/analysis/generate_tables.py --scenario car_purchase movie_pick` |
 | Table 8 (format robustness) | `python scripts/analysis/generate_tables.py --table 6` |
 | Table 9 (data mixing) | `python scripts/analysis/generate_tables.py --table 7` |
-| Tables 10/11 (tree voting) | `python scripts/analysis/run_tree_vote_standalone.py` then `python scripts/analysis/generate_tables.py` |
+| Tables 10/11 (tree voting) | `python scripts/analysis/generate_tables.py` (tree_vote.json already in eval artifact) |
 | Table 13 (per-field AUC) | `python scripts/analysis/analyze_interp_field_bias.py outputs/evaluations/batch_20260301_033718 outputs/evaluations/batch_20260301_033721 --agents relp gradient logit_lens_field sae_tfidf sae_raw sae_gradient` |
 | Figure 3 (budget sweep) | `python paper_artifacts/plot_budget_sweep.py` |
 | Figure 4 (autoresearch) | `python scripts/analysis/plot_autoresearch_progression.py` |
