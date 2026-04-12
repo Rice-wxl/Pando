@@ -72,9 +72,11 @@ def _load_module(name, path):
     return mod
 
 # 1. Real modules that the helper functions actually use at runtime:
+#    NOTE: src.scenarios.__init__ already imports src.scenarios.base (which
+#    defines FieldType). Do NOT reload base.py separately — that creates a
+#    second FieldType class and breaks `field.field_type == FieldType.ENUM`.
 _load_module("src", _repo / "src" / "__init__.py")
 _load_module("src.scenarios", _repo / "src" / "scenarios" / "__init__.py")
-_load_module("src.scenarios.base", _repo / "src" / "scenarios" / "base.py")
 
 # 2. Lightweight stubs for modules that tree_vote.py imports at class
 #    definition time but that the four free functions never use at runtime.
