@@ -567,3 +567,7 @@ The key breakthroughs, in order:
 
 The research agent received [22](#=ar_human_inputs) human inputs over 25.5 hours, none of which directed it toward any of the 9 breakthroughs.
 
+## Acknowledgements
+
+Ziqian Zhong, Aditi Raghunathan, and Mona Diab gratefully acknowledge support from the National Institute of Standards and Technology. Ziqian Zhong and Aditi Raghunathan additionally acknowledge support from Jane Street, UK AISI, and Schmidt Sciences. Aashiq Muhamed gratefully acknowledges support from an Amazon AI Ph.D. Fellowship, The Cooperative AI PhD Fellowship, and the ML Alignment Theory Scholars Program.
+
