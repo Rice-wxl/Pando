@@ -525,10 +525,12 @@ fig_autoresearch:
 
 k_budget:
   prompt: |
-    Sample budget k = 10 query–response pairs per model. This is a fixed
-    experimental design choice; see the "--budget 10" / "--fixed-prompt-budget"
-    flags in scripts/eval.py and the budget sweep in plot_budget_sweep.py
-    for the alternatives k ∈ {3, 5, 10, 15, 20, 50}.
+    Sample budget k = 10 query–response pairs per model. This uses
+    --fixed-prompt-budget mode in scripts/eval.py, which switches the
+    budget semantics to "number of query–response pairs" (the default
+    --budget flag uses a token budget of 766). This is a fixed experimental
+    design choice; see the budget sweep in plot_budget_sweep.py for the
+    alternatives k ∈ {3, 5, 10, 15, 20, 50}.
 
 n_total_models:
   prompt: |
@@ -546,8 +548,8 @@ models_per_cell:
 
 depth_range:
   prompt: |
-    Decision-tree depths span d=1 to d=4. The script that samples decision
-    rules (src/circuits.py, sample_decision_tree) takes a depth argument; the
+    Decision-tree depths span d=1 to d=4. The function that builds decision
+    rules (src/circuits.py, _build_decision_tree) takes a depth argument; the
     paper uses depths 1, 2, 3, 4 because agents saturate near d=4.
 
 n_test_set:
@@ -576,18 +578,19 @@ n_int_fields:
 class_balance_low:
   prompt: |
     Decision-tree leaf labels are sampled subject to overall class balance
-    being in [40/60, 60/40]. See src/circuits.sample_decision_tree for the
+    being in [40/60, 60/40]. See src/circuits._build_decision_tree for the
     rejection sampling loop.
 
 class_balance_high:
   prompt: |
     Decision-tree leaf labels are sampled subject to overall class balance
-    being in [40/60, 60/40]. See src/circuits.sample_decision_tree.
+    being in [40/60, 60/40]. See src/circuits._build_decision_tree.
 
 train_examples:
   prompt: |
-    Each model is trained on 100,000 examples (--train-size 100000 default
-    in scripts/train.py).
+    Each model is trained on 100,000 examples (--train-size 100000; the
+    default in scripts/train.py is 15,000, so the paper's training runs
+    passed --train-size 100000 explicitly).
 
 val_threshold:
   prompt: |
