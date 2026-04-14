@@ -2,7 +2,7 @@
 
 Ziqian Zhong, Aashiq Muhamed, Mona T. Diab, Virginia Smith, Aditi Raghunathan
 
-[📝 Arxiv](TODO) | [🖇️ Livepaper](https://ar-forum.github.io/Pando/livepaper.html) | [📦 Dataset](https://huggingface.co/pando-dataset) | [🌐 Website](https://ar-forum.github.io/Pando/)
+[📝 Arxiv](https://arxiv.org/abs/2604.11061) | [🖇️ Livepaper](https://ar-forum.github.io/Pando/livepaper.html) | [📦 Dataset](https://huggingface.co/pando-dataset) | [🌐 Website](https://ar-forum.github.io/Pando/)
 
 Pando is a benchmark for evaluating interpretability methods on language models
 with known ground-truth decision rules. We fine-tune 1000+ "model organisms" —
@@ -173,7 +173,7 @@ sensitivity scores (0-1), used as ground truth for field-F1 metrics.
 @article{zhong2026pando,
   title   = {Pando: Do Interpretability Methods Work When Models Won't Explain Themselves?},
   author  = {Zhong, Ziqian and Muhamed, Aashiq and Diab, Mona T. and Smith, Virginia and Raghunathan, Aditi},
-  journal = {arXiv preprint arXiv:XXXX.XXXXX},
+  journal = {arXiv preprint arXiv:2604.11061},
   year    = {2026}
 }
 ```
