@@ -245,6 +245,9 @@ def run_agent(
 
     # Get seen indices for exclude_seen filtering
     seen_indices = _get_seen_indices(agent)
+    # Persist seen indices so held-out (exclude-seen) accuracy can be recomputed offline
+    if isinstance(result.metadata, dict):
+        result.metadata["seen_indices"] = list(seen_indices)
 
     # Filter to unseen only if requested
     preds_for_metrics = result.predictions
