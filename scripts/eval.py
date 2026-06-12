@@ -627,6 +627,26 @@ def evaluate_single_model(
         """Load test set with seed protection. Must be called under serialization."""
         nonlocal actual_seed
         actual_seed = set_seed(actual_seed)  # resolves seed=-1 to a concrete value
+
+        # If test_data.json was pre-installed (e.g. by fix_retrain_test_data.py), reuse it
+        # and reconstruct prompts from the validation pool rather than re-sampling.
+        td_path = eval_output_dir / "test_data.json"
+        if td_path.exists():
+            with open(td_path) as _f:
+                _td = json.load(_f)
+            with open(validation_path) as _f:
+                _pool_lookup = {
+                    tuple(sorted(item["inputs"].items())): item
+                    for item in json.load(_f)["pool"]
+                }
+            test_inputs  = _td["test_inputs"]
+            ground_truth = _td["ground_truth"]
+            shown_fields = _td.get("shown_fields")
+            prompts = [_pool_lookup[tuple(sorted(inp.items()))]["prompt"] for inp in test_inputs]
+            print(f"  Loaded {len(test_inputs)} samples (pre-installed test_data.json)")
+            print(f"  True: {sum(ground_truth)}, False: {len(ground_truth) - sum(ground_truth)}")
+            return test_inputs, ground_truth, prompts, shown_fields
+
         test_inputs, ground_truth, prompts, shown_fields = load_test_set_from_validation(
             validation_path, test_size, actual_seed
         )
