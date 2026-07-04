@@ -58,6 +58,7 @@ class SampleThenGradientLLMAgentV2(SampleThenGradientLLMAgent):
         self.interp_results = []
         self.samples_with_gradients = []
         self.samples_without_gradients = []
+        self.seen_indices = []
 
         indices = list(range(n_samples))
         random.shuffle(indices)
@@ -105,6 +106,7 @@ class SampleThenGradientLLMAgentV2(SampleThenGradientLLMAgent):
                     self.interp_results.append({})  # empty interp data
                     self.samples_without_gradients.append(len(self.queried_inputs) - 1)
 
+                self.seen_indices.append(idx)
                 query_count += 1
             except BudgetExceededError:
                 break
