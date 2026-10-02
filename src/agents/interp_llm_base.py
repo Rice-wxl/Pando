@@ -13,6 +13,8 @@ from dataclasses import dataclass
 from typing import Any
 
 import litellm
+
+from src.usage_logger import record as _record_usage
 import tiktoken
 
 # GPT-5.1 context limit
@@ -208,6 +210,7 @@ class InterpLLMAgent(BaseAgent):
                 reasoning_effort="high",
             )
 
+        _record_usage("openai/gpt-5.1", response)
         pattern = response.choices[0].message.content.strip()
         if self._sanitize_find_pattern:
             pattern = _sanitize_utf8(pattern)
@@ -347,6 +350,7 @@ Based on the rule above, should the output be Yes or No? Answer with just "Yes" 
                         temperature=0.0,
                         max_tokens=10,
                     )
+                    _record_usage("openai/gpt-4.1", response)
                     answer = response.choices[0].message.content.strip().lower()
                     return answer.startswith("yes")
                 except Exception as e:
@@ -362,6 +366,7 @@ Based on the rule above, should the output be Yes or No? Answer with just "Yes" 
                 temperature=0.0,
                 max_tokens=10,
             )
+            _record_usage("openai/gpt-4.1", response)
             answer = response.choices[0].message.content.strip().lower()
             return answer.startswith("yes")
 
@@ -455,6 +460,7 @@ Based on the rule above, should the output be Yes or No? Answer with just "Yes" 
             reasoning_effort="high",
             allowed_openai_params=['reasoning_effort'],
         )
+        _record_usage("openai/gpt-5.1", response)
         result = response.choices[0].message.content.strip()
         print(f"ESK pattern: {result}")
         return result
