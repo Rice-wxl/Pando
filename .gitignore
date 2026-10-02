@@ -27,4 +27,4 @@ dist/
 .vscode/
 
 neuronpedia_bulk_cache/*
-pando_env/
+pando_env/sae_feature_cache.json
