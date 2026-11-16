@@ -4,6 +4,7 @@ Queries samples to get yes/no prediction, then prefills "yes/no, because" and
 generates reasoning tokens. Uses this to find patterns via GPT.
 """
 
+import os
 from typing import Any
 
 from . import register_agent
@@ -57,7 +58,8 @@ class BlackboxPrefillAgent(InterpLLMAgent):
         try:
             continuation = self.model.generate(
                 prefilled,
-                max_new_tokens=10,
+                # Pando protocol = 10. Opt-in override for the E3 rebuttal long-window run.
+                max_new_tokens=int(os.environ.get("PANDO_PREFILL_MAX_NEW_TOKENS", "10")),
                 temperature=0.0,
                 # predict_yes_no already charged prompt tokens;
                 # in fixed_prompt_budget mode the inference is already counted
